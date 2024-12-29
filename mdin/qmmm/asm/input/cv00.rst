@@ -1,0 +1,120 @@
+# Sidechain S15
+# MG-OG Distance (r1)
+ &rst
+  iat=27751,197
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# Backbone S15
+# MG-O Distance (r1)
+ &rst
+  iat=27751,200
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# D10
+# MG-OD Distance (r1)
+ &rst
+  iat=27751,133
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# Backbone I11
+# MG-O Distance (r1)
+ &rst
+  iat=27751,154
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# Backbone DA 
+# MG-OP1 Distance (r1)
+ &rst
+  iat=27751,27304
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# Sidechain D10
+# MG-OD2 Distance (r1)
+ &rst
+  iat=27752,132
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# Sidechain D986 OD2
+# MG-OD2 Distance (r1)
+ &rst
+  iat=27752,16243
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# Sidechain E762
+# MG-OE1 Distance (r1)
+ &rst
+  iat=27752,12480
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# Sidechain E762
+# MG-OE2 Distance (r1)
+ &rst
+  iat=27752,12481
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# Backbone DA
+# MG-O3' Distance (r1)
+ &rst
+  iat=27752,27302
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# Sidechain DA
+# MG-OP1 Distance (r1)
+ &rst
+  iat=27752,27304
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# WAT 
+# O-MGA
+ &rst
+  iat=27751,170393
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# WAT 
+# N-ND1
+ &rst
+  iat=170394,16198
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# WAT 
+# O-OP1
+ &rst
+  iat=170394,27304
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+
+# WAT
+# O-P
+ &rst
+  iat=170393,27303
+  r1=-99, r2=1.5, r3=2.0, r4=99,
+  rk2=50.0, rk3=50.0,
+ &end
+

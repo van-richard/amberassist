@@ -1,0 +1,11 @@
+parm step3_pbcsetup.parm7
+trajin step6.0*_equilibration.nc
+
+trajout step6_all.nc
+run
+
+trajin step6.05_equilibration.nc lastframe
+reference step6.05_equilibration.nc lastframe
+strip !(:371<:10) outprefix strip
+trajout strip_step6.nc strip_step6.nc
+run

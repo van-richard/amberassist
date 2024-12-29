@@ -1,0 +1,48 @@
+Langevin NVT simulation for equilibration
+ &cntrl
+    imin=0,        ! No minimization
+    irest=0,       ! This is NOT a restart of an old MD simulation
+    ntx=1,         ! So our inpcrd file has no velocities
+
+    ! Temperature control
+    ntt=3,         ! Langevin dynamics
+    gamma_ln=1.0,  ! Friction coefficient (ps^-1)
+    tempi=0,       ! Initial temp -- give it some small random velocities
+    temp0=300,     ! Target temperature
+    ig=-1,         ! Random seed
+
+    ! Potential energy control
+    cut=10.0,       ! nonbonded cutoff, in angstroms
+
+    ! MD settings: Simulation Time = nstlim*dt
+    nstlim=250000, ! Number of steps 
+    dt=0.001,      ! time step (ps)
+
+    ! SHAKE
+    ntc=2,         ! Constrain bonds containing hydrogen
+    ntf=2,         ! Do not calculate forces of bonds containing hydrogen
+
+    ! Control how often information is printed
+    ntpr=50000,     ! Print energies every ntpr steps
+    ntwx=50000,     ! Print coordinates every ntwx steps to the trajectory
+    ntwr=100000,    ! Print a restart file every ntwr steps (can be less frequent)
+!   ntwv=-1,       ! Uncomment to also print velocities to trajectory
+!   ntwf=-1,       ! Uncomment to also print forces to trajectory
+    ntxo=2,        ! Write NetCDF format
+    ioutfm=1,      ! Write NetCDF format (always do this!)
+
+    ! Wrap coordinates when printing them to the same unit cell
+    iwrap=1,
+
+    ! Restraint options
+    nmropt=1, ! 
+    !ntr=1,                          ! Positional restraint
+    !restraint_wt=0.25,               !weight for cartesian restraints
+    !restraintmask="(:MG&@C=)",    !restrained atoms
+ /
+
+ &wt type='TEMP0', istep1=0,istep2=250000, value1=0.0,value2=300/
+ &wt type='END' /
+ /
+
+
