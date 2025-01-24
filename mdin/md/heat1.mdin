@@ -1,19 +1,20 @@
 A NVT simulation for common production-level simulations
  &cntrl
     imin=0,        ! No minimization
-    irest=1,       ! This IS a restart of an old MD simulation
-    ntx=5,         ! So our inpcrd file has velocities
+    irest=0,       ! This is NOT a restart of an old MD simulation
+    ntx=1,         ! So our inpcrd file has no velocities
 
     ! Temperature control
     ntt=3,         ! Langevin dynamics
-    gamma_ln=5.0,  ! Friction coefficient (ps^-1)
+    gamma_ln=1.0,  ! Friction coefficient (ps^-1)
+    tempi=0,   ! Initial temp -- give it some small random velocities
     temp0=300,   ! Target temperature
 
     ! Potential energy control
-    cut=12.0,       ! nonbonded cutoff, in Angstroms
+    cut=12.0,       ! nonbonded cutoff, in angstroms
 
     ! MD settings
-    nstlim=1000000, ! 2 ns total
+    nstlim=100000, ! 250 ps total
     dt=0.001,      ! time step (ps)
 
     ! SHAKE
@@ -21,9 +22,9 @@ A NVT simulation for common production-level simulations
     ntf=2,         ! Do not calculate forces of bonds containing hydrogen
 
     ! Control how often information is printed
-    ntpr=100000,   ! Print energies every 1ns
-    ntwx=100000,   ! Print coordinates every 1ns 
-    ntwr=100000,  ! Print a restart file every 10ns
+    ntpr=10000,     ! Print energies every 1000 steps
+    ntwx=25000,     ! Print coordinates every 5000 steps to the trajectory
+    ntwr=100000,    ! Print a restart file every 10K steps (can be less frequent)
 !   ntwv=-1,       ! Uncomment to also print velocities to trajectory
 !   ntwf=-1,       ! Uncomment to also print forces to trajectory
     ntxo=2,        ! Write NetCDF format
@@ -31,14 +32,17 @@ A NVT simulation for common production-level simulations
 
     ! Wrap coordinates when printing them to the same unit cell
     iwrap=1,
-    
-    ! Restraints
-    !nmropt=1,      ! Turn on restraints
 
+    ! Restraint options
+    ntr=1,                          ! Positional restraints
+    restraint_wt=5.0,               !weight for cartesian restraints
+    restraintmask="(:MG&@P=,C=)",    !restrained atoms
+ /
+
+ &ewald
+ / 
+
+ &wt type = 'END'
  /
 
 
-&wt type='DUMPFREQ', istep1=50 /
-&wt type='END' /
-DISANG=cv.rst
-DUMPAVE=prod00.cv

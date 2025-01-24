@@ -1,25 +1,21 @@
 Minimization input file in explicit solvent
  &cntrl
-    ntmin=1,        ! default method: steepest decent, then conjugate gradient
-    dx0=0.01,       ! default step for minimizer
-
     ! Minimization options
-    imin=1,         ! Perform energy minimization
+    imin=1,         ! Turn on minimization
     maxcyc=500,     ! Maximum number of minimization cycles
-    ncyc=500,       ! ncyc steps of steepest-decent, better for strained systems
+    ncyc=500,       ! 100 steepest-descent steps, better for strained systems
 
     ! Potential energy function options
-    cut=10.0,       ! nonbonded cutoff, in angstroms
+    cut=12.0,       ! nonbonded cutoff, in angstroms
 
     ! Control how often information is printed to the output file
-    ntpr=100,      ! Print energies every ntpr steps
+    ntpr=100,      ! Print energies every 100 steps
     ntxo=2,        ! Write NetCDF format
     
     ! restrained atoms
-    ! nmropt=1,    ! Read restraints/weights
     ntr=1,                          !restraint specified atoms
-    restraintmask="@CA,C,O,N,H",    !restrained atoms
-    restraint_wt=1.0,               !weight for cartesian restraints (kcal.mol^-1.A^-2)
+    restraintmask="@CA,C|(!@H=)",    !restrained atoms
+    restraint_wt=10.0,               !weight for cartesian restraints (kcal.mol^-1.A^-2)
  /
 
 
