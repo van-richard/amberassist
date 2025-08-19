@@ -1,0 +1,15 @@
+old_path,duplicate_of,category,sha1
+mdin/qmmm/semiempirical/param/input/parmed.sh,ambertools/parmed.1264.sh,ambertools,ffbac87c9bbb3810db82fc1aaaa92bd5a48d938f
+ambertools/pytraj/rmsd-single.py,ambertools/pytraj/rmsd.py,cpptraj_analysis,a39f08f97e60d14f58bd93440a8833ce97ddb6b1
+mdin/qmmm/semiempirical/reparam/cv.rst,mdin/qmmm/dft/cv.rst,template,a6ac4b1f7903bf57d87493f3a59c6ab75d8956a4
+mdin/qmmm/asm/input/qmhub.ini,mdin/qmmm/dft/qmhub.ini,template,c767de8614998efec2d90f77d0a104995781d22e
+mdin/qmmm/semiempirical/reparam/qmhub.ini,mdin/qmmm/dft/qmhub.ini,template,c767de8614998efec2d90f77d0a104995781d22e
+mdin/qmmm/semiempirical/reparam/step5.00_equilibration.mdin,mdin/qmmm/dft/step5.00_equilibration.mdin,template,ce632217b8880dfe79dcb41d66e8b9697cb1c89f
+mdin/qmmm/mts/sinr/input/cv.rst,mdin/qmmm/mts/langevin/input/cv.rst,template,5318fc32a90a19a8483e20966010eb21a4b69aa5
+mdin/qmmm/semiempirical/param/input/cv.rst,mdin/qmmm/mts/langevin/input/cv.rst,template,5318fc32a90a19a8483e20966010eb21a4b69aa5
+mdin/qmmm/mts/sinr/input/gen_cv.sh,mdin/qmmm/mts/langevin/input/gen_cv.sh,writer,fe44ec159397e81173e8d5cbb9a65cfa9f52fd86
+mdin/qmmm/semiempirical/param/input/gen_cv.sh,mdin/qmmm/mts/langevin/input/gen_cv.sh,writer,fe44ec159397e81173e8d5cbb9a65cfa9f52fd86
+mdin/qmmm/mts/sinr/input/gen_inputs.sh,mdin/qmmm/mts/langevin/input/gen_inputs.sh,writer,e8e1861861196ca92ea7cebfda5056fc7b7a6740
+mdin/qmmm/mts/sinr/input/qmhub.ini,mdin/qmmm/mts/langevin/input/qmhub.ini,template,210edf41077dfeee5f2317878f110ecc86dfd55b
+mdin/qmmm/semiempirical/param/run1.sh,mdin/qmmm/semiempirical/param/runqmmm.slurm,job,24b515cb46cf59f2a878b8a3fe4239fbac3c61a6
+mlp/torchmdnet/train2.sh,mlp/torchmdnet/train.sh,keep,678fa99904822ba7567316c02e92c912bd482aea

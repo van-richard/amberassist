@@ -5,6 +5,17 @@
 ## Contents
 
 ```bash
+amberassist/
+├── ambertools/      # wrappers + pytraj scripts
+├── io/              # reusable file readers/writers
+├── mdin/            # curated input templates
+├── mbar/            # analysis notebooks/scripts
+├── mlp/             # ML potentials + scripts
+├── util/            # small helper funcs not tied to IO
+├── tests/           # regression/unit tests
+├── LICENSE
+└── README.md
+
 ├── ambertools
 │   ├── cpptraj
 │   ├── parmed
