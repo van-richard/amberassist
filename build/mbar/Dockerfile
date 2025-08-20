@@ -10,18 +10,18 @@ ENV MAMBA_ROOT_PREFIX=/opt/conda \
     MPLBACKEND=Agg
 
 # Create env + conda-forge pins
+# still working on this: jupyter_client=10.6.1 jupyter_core=5.7.2 && \
 RUN micromamba create -y -n mbar -c conda-forge python=3.9.19 && \
     micromamba install -y -n mbar -c conda-forge \
-      pip=23.3.1 numpy=1.26.4 scipy=1.13.0 pandas=2.2.1 \
-      matplotlib=3.8.4 matplotlib-base=3.8.4 matplotlib-inline=0.1.6 seaborn-base=0.13.2 pillow=10.3.0 statsmodels=0.14.1 \
-      ipython=8.18.1 ipykernel=6.29.3 jupyter_client=8.6.1 jupyter_core=5.7.2 && \
+      pip=23.3.1 \
     /opt/conda/envs/mbar/bin/pip install --no-cache-dir \
-      pymbar==3.0.5 scikit-learn==1.4.2
+      pymbar==3.0.5 scikit-learn==1.4.2 numpy==1.26.4 scipy=1.13.0 pandas=2.2.1 \
+      matplotlib=3.8.4 seaborn-base=0.13.2 ipython=8.18.1 ipykernel=6.29.3 \
 
 # Fetch your exact patched file (locked to commit e15e7b8...)
 # (You can replace this ADD with a local COPY if you prefer to avoid network)
 # Replace your ADD line with this:
-ADD --chmod=0644 https://raw.githubusercontent.com/van-richard/amberassist/e15e7b873fe5548783f76114cce4d58292254f69/mbar/mbar_pmf2.py /opt/conda/envs/mbar/lib/python3.9/site-packages/pymbar/mbar_pmf.py 
+ADD --chmod=0644 https://raw.githubusercontent.com/van-richard/amberassist/e15e7b873fe5548783f76114cce4d58292254f69/mbar/mbar_pmf.py /opt/conda/envs/mbar/lib/python3.9/site-packages/pymbar/mbar_pmf.py 
 
 # Install the patched module robustly:
 #  - compute the actual site-packages path
