@@ -1,2 +1,7 @@
 .DS_Store
 _drafts
+amberassist_exact_duplicates.csv
+amberassist_reorg_mapping.csv
+apply_reorg.sh
+build/*/*.tar
+build/*/*.sif

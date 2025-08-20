@@ -1,20 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 # # MBAR 
 # 
 # Updated: 12/21/2024 
 # 
 # By: van
-
-# In[1]:
-
-
-get_ipython().system('printf "This notebook is found in...\\n$(echo $(realpath .))"')
-
-
-# In[2]:
-
 
 import os
 import sys
@@ -31,14 +19,7 @@ import pymbar
 from pymbar.mbar_pmf import mbar_pmf
 
 
-# In[3]:
-
-
 os.makedirs('img', exist_ok=True)
-
-
-# In[4]:
-
 
 step="step5"
 rep="00"
@@ -49,16 +30,8 @@ val_max = 3.00
 fc = 300.0
 nbins = n_windows - 1
 
-
-# In[5]:
-
-
 val0_k = np.linspace(val_min, val_max, n_windows)
 K_k = np.ones(n_windows) * fc
-
-
-# In[6]:
-
 
 val_kn = []
 for i in range(n_windows):
@@ -66,36 +39,18 @@ for i in range(n_windows):
     arrays = [np.loadtxt(f, usecols=1)[::] for f in fnames[:]]
     val_kn.append(np.concatenate(arrays))
 
-
-# In[7]:
-
-
 for i in range(n_windows):
     print("Window %02d:" % i, pymbar.timeseries.subsampleCorrelatedData(val_kn[i], conservative=True))
-    
-
-
-# In[8]:
-
 
 # mbar = mbar_B(val_kn, val0_k, K_k, 300.0, u_kn=np.array(ene_pm3))
 mbar = mbar_pmf(val_kn, val0_k, K_k, fc)
-
-
-# In[9]:
-
-
 bin_centers, f_i, df_i, reweighting_entropy = mbar.get_pmf(val_min, val_max, nbins)
 bin_centers, f_i, df_i, reweighting_entropy = mbar.get_pmf(val_min, val_max, nbins, uncertainties='from-specified', pmf_reference=f_i[:20].argmin())
 np.savetxt(f"freefile_mbar_{step}.{rep}", np.column_stack((bin_centers, f_i, df_i)))
 
 
 # # Histogram + Preliminary PMF 
-# 
 # ## _Not for publication_
-
-# In[10]:
-
 
 initial = np.loadtxt(f"freefile_mbar_{step}.{rep}")
 
@@ -112,11 +67,6 @@ _yfrac=0.9
 
 opa=0.4
 
-
-# In[41]:
-
-
-# fig = plt.figure(sharex=True, figsize=(7.5,5), dpi=150)
 fig = plt.figure(figsize=(10,6))
 
 axs = fig.subplot_mosaic(
@@ -156,23 +106,5 @@ fig.subplots_adjust(wspace=0, hspace=0)
 plt.savefig(f"img/prelim-B-{step}.{rep}.png")
 plt.show()
 
-
-# In[ ]:
-
-
 # Copy notebook to templates directory
-
 # !cp mbar.ipynb /home/van/Scripts/amber/mbar/mbar.ipynb
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
