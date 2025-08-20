@@ -25,13 +25,16 @@ import argparse
 import numpy as np
 from glob import glob
 from datetime import datetime
+from sklearn.utils import resample
 
 import pymbar
 # Use your patched module if available; fallback to the uploaded file.
 try:
     from pymbar.mbar_pmf import mbar_pmf
+    print("mbar_pmf")
 except Exception:
     from mbar_pmf2 import mbar_pmf  # fallback for development
+    print("mbar_pmf2")
 
 # --------------------------- Helpers ---------------------------
 
