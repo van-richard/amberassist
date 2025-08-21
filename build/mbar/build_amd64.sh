@@ -68,3 +68,4 @@ echo "Quick tests (if apptainer is installed on macOS):"
 echo "  apptainer exec ${SIF_NAME} python -c 'import platform; print(platform.machine())'   # expect x86_64"
 echo "  apptainer exec ${SIF_NAME} python -c 'import pymbar, numpy; print(\"OK\", pymbar.__version__, numpy.__version__)'"
 
+rm init.PATCH mbar_pmf.py
