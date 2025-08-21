@@ -17,6 +17,7 @@ https://docs.docker.com/desktop/?_gl=1*2oezum*_gcl_au*MTc3MTUzMTQ5My4xNzU1NzE2ND
 
 ## Workflow
 
+```bash
  ┌────────────────────────────┐
  │   macOS (M2 Pro, Docker)   │
  └────────────────────────────┘
@@ -61,6 +62,24 @@ https://docs.docker.com/desktop/?_gl=1*2oezum*_gcl_au*MTc3MTUzMTQ5My4xNzU1NzE2ND
  │   Linux HPC (x86_64)       │
  │   Run with Apptainer       │
  └────────────────────────────┘
+
+```
+
+---
+
+## Using `lima`
+
+```bash
+limactl create --name=apptainer template://docker
+```
+
+```bash
+limactl start apptainer
+```
+
+```bash
+limactl stop apptainer
+```
 
 ---
 
