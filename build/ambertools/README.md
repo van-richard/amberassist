@@ -8,8 +8,8 @@ bash build_amd64.sh
 
 # Usage
 
-- `mbar.py` in `../../mbar/mbar.py`
-
 ```bash
-apptainer exec -B /scratch:/scratch -W "$PWD" mbar_amd64.sif python mbar.py --step step6 
+apptainer exec -B /scratch:/scratch -W "$PWD" ambertools24_amd64.sif [tool]
 ```
+
+- where `[tool]` can be `tleap`, `cpptraj`, `parmchk2`, etc.

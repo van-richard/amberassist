@@ -25,7 +25,6 @@ import argparse
 import numpy as np
 from glob import glob
 from datetime import datetime
-from scipy import stats
 from sklearn.utils import resample
 
 import pymbar
@@ -207,7 +206,7 @@ def main():
     # Echo correlation info (kept from original)
     for i in range(n_windows):
         ess_idx = pymbar.timeseries.subsampleCorrelatedData(val_kn[i], conservative=True)
-        print(f"Window {i:02d}: {ess_idx} effective samples")
+        print(f"Window {i:02d}: {len(ess_idx)} effective samples")
 
     # Robust PMF bin selection to avoid empty bins
     pmf_min, pmf_max, pmf_nbins = _determine_pmf_binning(val_kn, val_min, val_max, nbins)

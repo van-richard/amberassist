@@ -1,16 +1,15 @@
 # Notes
 
-Requirements (MacOS):
-    - install `lima`
+!!! note "Requirements (MacOS):"
+    - [`lima`](https://lima-vm.io/docs/reference/limactl/)
+    - `docker`
 
-```bash
+```bash "lima"
 brew install lima
 ```
 
-- install `docker`
-
-```bash
-https://docs.docker.com/desktop/?_gl=1*2oezum*_gcl_au*MTc3MTUzMTQ5My4xNzU1NzE2NDg4*_ga*MTI2MDE2NjAxNC4xNzU1NzE2NDc1*_ga_XJWPQMJYHQ*czE3NTU3MjU1NDUkbzIkZzEkdDE3NTU3MjU1NTUkajUwJGwwJGgw
+```bash "docker"
+https://docs.docker.com/engine/install/
 ```
 
 ---
@@ -81,13 +80,4 @@ limactl start apptainer
 limactl stop apptainer
 ```
 
----
-
-## Building
-
-1. Build SIF locally on MacOS (silicon)
-
-```bash
-bash build_[OS].sh
-```
 
