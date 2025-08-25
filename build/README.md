@@ -1,16 +1,42 @@
 # Notes
 
-Requirements (MacOS):
-    - install `lima`
+## Requirements:
 
-```bash
+1. MacOS (silicon)
+
+```bash "install lima (w/ brew)"
 brew install lima
 ```
 
-- install `docker`
+```bash "install docker"
+https://docs.docker.com/desktop/setup/install/mac-install/
+```
 
-```bash
-https://docs.docker.com/desktop/?_gl=1*2oezum*_gcl_au*MTc3MTUzMTQ5My4xNzU1NzE2NDg4*_ga*MTI2MDE2NjAxNC4xNzU1NzE2NDc1*_ga_XJWPQMJYHQ*czE3NTU3MjU1NDUkbzIkZzEkdDE3NTU3MjU1NTUkajUwJGwwJGgw
+2. Linux (intel)
+
+```bash "install docker"
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+```
+
+```bash "install docker packages"
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+```bash "verify installation"
+sudo docker run hello-world
 ```
 
 ---

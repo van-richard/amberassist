@@ -12,7 +12,7 @@ ENV MAMBA_ROOT_PREFIX=/opt/conda \
 # still working on this: jupyter_client=10.6.1 jupyter_core=5.7.2 && \
 # --- conda env with pinned core stack (CONDA syntax: = not ==) ---
 RUN micromamba create -y -n ambertools23 -c conda-forge python=3.11 && \
-    micromamba install -y -n ambertools23 -c conda-forge ambertools=23 \
+    micromamba install -y -n ambertools23 -c conda-forge ambertools=23 
 
 # Install the patched module robustly:
 #  - compute the actual site-packages path

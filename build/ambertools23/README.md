@@ -9,11 +9,11 @@ bash build_[machine]_amd64.sh # [machine] is your computer (mac or linux)
 # Usage
 
 ```bash "use SIF to run python scripts"
-apptainer exec -B /scratch:/scratch -W "$PWD" mbar_amd64.sif python mbar.py --step step6 
+apptainer exec -B /scratch:/scratch -W "$PWD" ambertools23_amd64.sif python mbar.py --step step6 
 ```
 
 - this example uses [mbar.py](../../mbar/mbar.py)
 
 ```bash "use SIF to start SHELL"
-apptainer shell -W "$PWD" mbar_amd64.sif 
+apptainer shell -W "$PWD" ambertools23_amd64.sif 
 ```

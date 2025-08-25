@@ -28,18 +28,6 @@ RUN /opt/conda/envs/mbar/bin/pip install --no-cache-dir \
 RUN mv /opt/conda/envs/mbar/lib/python3.9/site-packages/pymbar/__init__.py /opt/conda/envs/mbar/lib/python3.9/site-packages/pymbar/init.BAK
 
 
-# --- stage your patched file (networked) ---
-#ADD --chmod=0644 https://github.com/van-richard/amberassist/blob/bed42c902549bff2e8fe6283809f029950db1d23/mbar/mbar_pmf.py /opt/conda/envs/mbar/lib/python3.9/site-packages/pymbar/mbar_pmf.py
-#ADD --chmod=0644 https://github.com/van-richard/amberassist/blob/9c88882cff0a8859e80939fbf70824ee3bb7e76b/mbar/init.PATCH /opt/conda/envs/mbar/lib/python3.9/site-packages/pymbar/__init__.py
-
-
-# Fetch your exact patched file (locked to commit e15e7b8...)
-# (You can replace this ADD with a local COPY if you prefer to avoid network)
-# Replace your ADD line with this:
-#COPY --chmod=0644 mbar_pmf.py /tmp/mbar_pmf.py
-# /opt/conda/envs/mbar/lib/python3.9/site-packages/pymbar/mbar_pmf.py 
-# ADD --chmod=0644  https://github.com/van-richard/amberassist/blob/bed42c902549bff2e8fe6283809f029950db1d23/mbar/mbar_pmf.py 
-
 # Install the patched module robustly:
 #  - compute the actual site-packages path
 #  - ensure the pymbar dir exists
