@@ -5,3 +5,7 @@ amberassist_reorg_mapping.csv
 apply_reorg.sh
 build/*/*.tar
 build/*/*.sif
+*/.ipynb_checkpoints
+*/.ipynb*
+*/*/.ipynb*
+*/*/*/.ipynb*
