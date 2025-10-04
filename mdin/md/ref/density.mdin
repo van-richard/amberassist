@@ -1,4 +1,4 @@
-A NVT simulation for common production-level simulations
+A NPT simulation for common production-level simulations
  &cntrl
     imin=0,        ! No minimization
     irest=1,       ! This IS a restart of an old MD simulation
@@ -10,10 +10,10 @@ A NVT simulation for common production-level simulations
     temp0=300,   ! Target temperature
 
     ! Potential energy control
-    cut=12.0,       ! nonbonded cutoff, in Angstroms
+    cut=12.0,       ! nonbonded cutoff, in angstroms
 
     ! MD settings
-    nstlim=10000000, ! 2 ns total
+    nstlim=200000,! 2ns total
     dt=0.001,      ! time step (ps)
 
     ! SHAKE
@@ -21,9 +21,9 @@ A NVT simulation for common production-level simulations
     ntf=2,         ! Do not calculate forces of bonds containing hydrogen
 
     ! Control how often information is printed
-    ntpr=1000000,   ! Print energies every 100ps
-    ntwx=1000000,   ! Print coordinates every 100ps 
-    ntwr=1000000,  ! Print a restart file every 1ns
+    ntpr=50000,     ! Print energies every 1000 steps
+    ntwx=50000,     ! Print coordinates every 5000 steps to the trajectory
+    ntwr=100000,    ! Print a restart file every 10K steps (can be less frequent)
 !   ntwv=-1,       ! Uncomment to also print velocities to trajectory
 !   ntwf=-1,       ! Uncomment to also print forces to trajectory
     ntxo=2,        ! Write NetCDF format
@@ -31,19 +31,23 @@ A NVT simulation for common production-level simulations
 
     ! Wrap coordinates when printing them to the same unit cell
     iwrap=1,
-    
-    ! Restraints
-    !nmropt=1,      ! Turn on restraints
-    
-    ! Restraint options
-    !ntr=1,                          ! Positional restraints
-    !restraint_wt=0.0,               !weight for cartesian restraints
-    !restraintmask="(:MG&@P=,C=)",    !restrained atoms
 
+    ! Constant pressure control.
+    barostat=1,    ! Berendsen barostat... change to 2 for MC
+    ntp=1,         ! 1=isotropic, 2=anisotropic, 3=semi-isotropic w/ surften
+    pres0=1.0,     ! Target external pressure, in bar
+    taup=1.0,
+
+    ! Restraint
+    nmropt=1,
+ &end
  /
 
+ &ewald
+ /
+ &wt type='DUMPFREQ', istep1=25000 /
+ &wt type = 'END' /
+ DISANG=cv.rst
+ DUMPAVE=density.cv
+ /
 
-! &wt type='DUMPFREQ', istep1=50 /
-! &wt type='END' /
-! DISANG=cv2.rst
-! DUMPAVE=prod00.cv

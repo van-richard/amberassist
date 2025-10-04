@@ -14,8 +14,8 @@ Minimization input file in explicit solvent
     
     ! restrained atoms
     ntr=1,                          !restraint specified atoms
-    restraintmask="@CA,C|(!@H=)",    !restrained atoms
-    restraint_wt=10.0,               !weight for cartesian restraints (kcal.mol^-1.A^-2)
+    restraintmask="@CA,C,O,H",
+    restraint_wt=2.0,               !weight for cartesian restraints (kcal.mol^-1.A^-2)
+    
  /
-
 
