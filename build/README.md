@@ -1,5 +1,6 @@
 # Notes
 
+<<<<<<< HEAD
 ## Requirements:
 
 1. MacOS (silicon)
@@ -37,6 +38,18 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 ```bash "verify installation"
 sudo docker run hello-world
+=======
+!!! note "Requirements (MacOS):"
+    - [`lima`](https://lima-vm.io/docs/reference/limactl/)
+    - `docker`
+
+```bash "lima"
+brew install lima
+```
+
+```bash "docker"
+https://docs.docker.com/engine/install/
+>>>>>>> test
 ```
 
 ---
@@ -107,13 +120,4 @@ limactl start apptainer
 limactl stop apptainer
 ```
 
----
-
-## Building
-
-1. Build SIF locally on MacOS (silicon)
-
-```bash
-bash build_[OS].sh
-```
 
