@@ -16,7 +16,7 @@ RUN micromamba create -y -n miniforge3 -c conda-forge python=3.9.19 && \
       pip=23.3.1 ipython=8.18.1 ipykernel=6.29.3 \
       matplotlib=3.8.4 seaborn-base=0.13.2 \
       numpy=1.26.4 scipy=1.13.0 pandas=2.2.1 \
-      jupyterlab nb_conda_kernel \
+      jupyterlab \
       libblas=3.9.0=22_linux64_openblas libcblas=3.9.0=22_linux64_openblas \
       liblapack=3.9.0=22_linux64_openblas libopenblas=0.3.27 \
       tzdata=2024a ca-certificates

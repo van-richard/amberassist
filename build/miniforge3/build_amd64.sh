@@ -29,15 +29,11 @@ need limactl
 docker buildx ls >/dev/null 2>&1 || die "Docker Buildx not available (enable Docker Desktop Buildx or Colima buildx)."
 limactl ls | grep -q "^${LIMA_INSTANCE}\b" || die "Lima instance '${LIMA_INSTANCE}' not found. Run: limactl ls"
 
-#copy_to_lima "../../miniforge3/miniforge3_pmf.py" "/tmp/miniforge3_pmf.py"
-#copy_to_lima "../../miniforge3/init.PATCH" "/tmp/init.PATCH"
-
 # Ensure Dockerfile exists
 [ -f Dockerfile ] || die "Dockerfile not found in $(pwd)"
 
 echo "==> 1/4 Build linux/amd64 image (QEMU) and export docker-archive tar"
-docker buildx build --platform linux/amd64 -t "${IMG_TAG}" .
-docker save "${IMG_TAG}" -o "${TAR_NAME}"
+docker buildx build --platform linux/amd64 -t "${IMG_TAG}" --output=type=docker,dest="${TAR_NAME}" .
 [ -s "${TAR_NAME}" ] || die "Tar not created: ${TAR_NAME}"
 echo "    created ${TAR_NAME}"
 
