@@ -45,9 +45,8 @@ done < "$QMINFO"
 CV_i="$cv_min"
 step="0.1"
 
-inp_dir="${cwd}/input"
+inp_dir="../input"
 
-cd "$cwd"
 
 # If you still have a "list" file and want to use it, keep this:
 # mapfile -t windows < list
@@ -59,8 +58,8 @@ done
 
 for window in "${windows[@]}"; do
   echo "create: ${window}, ${inp_dir}/cv.rst"
-  mkdir -p "$window"
-  cd "$window"
+  mkdir -p "../$window"
+  cd "../$window"
   cp "${inp_dir}/cv.rst.tmp" "cv.rst"
 
   nn="$(printf "%.3f" "${CV_i}")"
@@ -68,6 +67,6 @@ for window in "${windows[@]}"; do
   sed -i "s/__RST__/${nn}/g" cv.rst
 
   CV_i="$(echo "${CV_i} + ${step}" | bc)"
-  cd "$cwd"
+  cd -
 done
 

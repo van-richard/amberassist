@@ -46,13 +46,6 @@ for v in qmmask qmtheory qmcharge thermostat NSTEPS5 NSTEPS6 n_windows print_fre
   [[ -n "${!v}" ]] || { echo "ERROR: $QMINFO missing '$v='" >&2; exit 1; }
 done
 
-####################
-# Don't change this
-####################
-cwd=$(realpath ..)
-inp_dir="${cwd}/input"
-n_windows=$(echo "${total_num_w}-1" | bc)
-
 # --- Thermostat block (drop this somewhere after THERMOSTAT is set) ---
 case "${thermostat}" in
   langevin)
@@ -159,4 +152,5 @@ render_mdin() {
 render_mdin "equilibration.mdin.tmp" "step5"
 render_mdin "equilibration.mdin.tmp" "step6"
 
-
+n_win=$(echo "${n_windows}-1" | bc)
+seq -w 0 ${n_win} > ../list

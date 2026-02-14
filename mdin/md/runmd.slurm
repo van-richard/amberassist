@@ -22,10 +22,10 @@ else
 fi
 
 # min
-$cpu -i min.mdin -p ${init}.parm7 -c ${init}.rst7 -O -o min.mdout -r min.rst7 -inf min.mdinfo -ref ${init}.rst7 -x min.nc
+#$cpu -i min.mdin -p ${init}.parm7 -c ${init}.rst7 -O -o min.mdout -r min.rst7 -inf min.mdinfo -ref ${init}.rst7 -x min.nc
 
 # Heating
-$pmemd -i heat.mdin -p ${init}.parm7 -c min.rst7 -O -o heat.mdout -r heat.rst7 -inf heat.mdinfo -ref ${init}.rst7 -x heat.nc
+#$cpu -i heat.mdin -p ${init}.parm7 -c min.rst7 -O -o heat.mdout -r heat.rst7 -inf heat.mdinfo -ref ${init}.rst7 -x heat.nc
 
 # Pressure
 $pmemd -i density.mdin -p ${init}.parm7 -c heat.rst7 -O -o density.mdout -r density.rst7 -inf density.mdinfo -ref ${init}.rst7 -x density.nc

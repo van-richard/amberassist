@@ -1,25 +1,22 @@
-A NVT simulation for SINR THERMOSTAT production-level simulations
+A NVT simulation with SINR thermostat production-level simulations
  &cntrl
     imin=0,        ! No minimization
-    irest=1,       ! This IS a restart of an old MD simulation
-    ntx=5,         ! So our inpcrd file has velocities
+    irest=__IREST__,       ! This IS a restart of an old MD simulation
+    ntx=__NTX__,         ! So our inpcrd file has velocities
 
-    ! Boundary conditions
-    ntb=1,         ! Periodic boundaries for constant volume
+    ! Boundary conditions ntb=1,         ! Periodic boundaries for constant volume
     ntp=0,         ! No pressure control
 
     ! Temperature control
-    ntt=3,         ! Langevin dynamics
+    ntt=3,         ! SINR thermostat
     gamma_ln=1.0,  ! Friction coefficient (ps^-1)
-    tempi=10.0,    ! Initial temp -- give it some small random velocities
-    temp0=300.0,   ! Target temperature
-    ig=-1,         ! Random number seed
+    temp0=300.0,   ! Target temperature    ig=-1,         ! Random number seed
 
     ! Potential energy control
     cut=10.0,      ! nonbonded cutoff, in Angstroms
 
     ! MD settings
-    nstlim=10000,  ! 10 ps total
+    nstlim=500,    ! 500 fs total
     dt=0.001,      ! time step (ps)
 
     ! SHAKE
@@ -28,9 +25,9 @@ A NVT simulation for SINR THERMOSTAT production-level simulations
     tol=0.000001,  ! Shake tolerance
 
     ! Control how often information is printed
-    ntpr=100,      ! Print energies every 100 steps
-    ntwx=100,      ! Print coordinates every 100 steps to the trajectory
-    ntwr=1000,     ! Print a restart file every 5K steps (can be less frequent)
+    ntpr=50,      ! Print energies every 100 steps
+    ntwx=50,      ! Print coordinates every 100 steps to the trajectory
+    ntwr=200,     ! Print a restart file every 5K steps (can be less frequent)
 !   ntwv=-1,       ! Uncomment to also print velocities to trajectory
 !   ntwf=-1,       ! Uncomment to also print forces to trajectory
     ntxo=2,        ! Write NetCDF format
@@ -56,24 +53,29 @@ A NVT simulation for SINR THERMOSTAT production-level simulations
 
  &qmmm
     ! QM atoms
-    qmmask="__QMMASK__",
+    qmmask='(:301,322&!@N,H,CA,HA,C,O)|((:13&@385-409)|(:14&!@417-442))|:371,397,398,399,400',
 
     ! QM settings
-    qm_theory='__QMTHEORY__',
-    qmcharge=__QMCHARGE__,
+    qm_theory='EXTERN',
+    qmcharge=+1,
 
     ! Shake
-    qmshake=__QMSHAKE__,     ! Use Shake for QM atoms
+    qmshake=0,     ! Use Shake for QM atoms
 
     ! Potential energy control
-    qmcut=__QMCUT__,    ! Cutoff for QM/MM electrostatic interactions
-    qm_ewald=__QMEWALD__,    ! QM/MM with periodic boundaries
-    qm_pme=__QMPME__,      ! Use PME for QM-MM electrostatic interactions
-    qmmm_switch=__QMSWITCH__, ! Switching for QM-MM
+    qmcut=999.0,    ! Cutoff for QM/MM electrostatic interactions
+    qm_ewald=0,    ! QM/MM with periodic boundaries
+    qm_pme=0,      ! Use PME for QM-MM electrostatic interactions
+    qmmm_switch=0, ! Switching for QM-MM
     writepdb=1,    ! Check QM atoms
- /
+    /
+
+  &qmhub
+   config="qmhub.ini",
+   basedir="__QMHUBSCRATCH__",
+  /
 
  &wt type='DUMPFREQ', istep1=10 /
  &wt type='END' /
  DISANG=cv.rst
- DUMPAVE=step6.00_equilibration.cv
+ DUMPAVE=step5.00_equilibration.cv
