@@ -1,38 +1,27 @@
 # amberassist
 
-- Templates for system setup, simulation inputs, and analysis scripts 
+Templates for system setup, simulation inputs, and analysis scripts 
 
 ## Contents
 
 ```bash
-amberassist/
-├── ambertools/      # wrappers + pytraj scripts
-├── io/              # reusable file readers/writers
-├── mdin/            # curated input templates
-├── mbar/            # analysis notebooks/scripts
-├── mlp/             # ML potentials + scripts
-├── util/            # small helper funcs not tied to IO
-├── tests/           # regression/unit tests
-├── LICENSE
-└── README.md
-
-├── ambertools
+├── ambertools          # ambertools scripts
 │   ├── cpptraj
-│   ├── parmed
 │   ├── pytraj
 │   └── tleap
-├── bash
-├── mbar
-├── mdin
-│   ├── md
-│   └── qmmm
-│       ├── asm
-│       ├── dft
-│       ├── fmatch
-│       ├── mts
-│       ├── reprocessing
-│       └── semiempirical
-└── mlp
-    ├── delta
-    └── torchmdnet
+├── build               # testing docker
+├── fmatch              # SE Reparameterization  (force matching)
+├── io                  # file readers/writers
+│   └── slurm
+├── mbar                # free energy estimator
+├── mdin                # MD input templates
+│   ├── md              # classical MD simulations
+│   └── qmmm            # QM/MM umbrella sampling 
+├── mlp                 # machine learning potentials
+│   ├── delta
+│   └── torchmdnet
+├── notebooks
+├── reprocess           # post-processing with QMHub
+├── util                # other helper scripts
+└── wtp                 # weighted thermodynamic perturbation
 ```

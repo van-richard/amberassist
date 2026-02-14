@@ -14,7 +14,6 @@ The purpose is to **re-evaluate saved trajectory frames** (e.g., from classical 
 | `qmhub2.ini`                  | QMHub configuration file linking Amber MM region to the QM engine.     |
 | `reprocessing.slurm`          | SLURM array script that submits all umbrella windows for reprocessing. |
 | `dedup.sh`                    | Cleans up duplicate `qmmm.inp_*` files generated during QMHub runs.    |
-| `materialize.py` *(optional)* | Generates per-frame QM/MM input files on demand from packed data.      |
 
 ---
 
