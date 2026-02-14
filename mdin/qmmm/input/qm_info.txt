@@ -1,0 +1,15 @@
+cwd=/home/van/github/amberassist/mdin/qmmm
+protein=301,322
+na=(:13&@385-409)|(:14&!@417-442)
+metal=371
+water=397,398,399,400
+qmmask=(:301,322&!@N,H,CA,HA,C,O)|((:13&@385-409)|(:14&!@417-442))|:371,397,398,399,400
+qmtheory=EXTERN
+qmcharge=+1
+thermostat=langevin
+nsteps5=500
+nsteps6=800
+n_windows=42
+cv_min=-1.90
+print_freq=50
+rc=409,410,410,6255

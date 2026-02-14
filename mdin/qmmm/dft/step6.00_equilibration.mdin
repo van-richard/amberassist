@@ -1,8 +1,8 @@
-A NVT simulation with SINR thermostat production-level simulations
+A NVT simulation for SINR THERMOSTAT production-level simulations
  &cntrl
     imin=0,        ! No minimization
-    irest=__IREST__,       ! This IS a restart of an old MD simulation
-    ntx=__NTX__,         ! So our inpcrd file has velocities
+    irest=1,       ! This IS a restart of an old MD simulation
+    ntx=5,         ! So our inpcrd file has velocities
 
     ! Boundary conditions
     ntb=1,         ! Periodic boundaries for constant volume
@@ -21,7 +21,7 @@ A NVT simulation with SINR thermostat production-level simulations
     cut=10.0,      ! nonbonded cutoff, in Angstroms
 
     ! MD settings
-    nstlim=500,    ! 500 fs total
+    nstlim=8000,  ! 10 ps total
     dt=0.001,      ! time step (ps)
 
     ! SHAKE
@@ -32,7 +32,7 @@ A NVT simulation with SINR thermostat production-level simulations
     ! Control how often information is printed
     ntpr=100,      ! Print energies every 100 steps
     ntwx=100,      ! Print coordinates every 100 steps to the trajectory
-    ntwr=500,     ! Print a restart file every 5K steps (can be less frequent)
+    ntwr=1000,     ! Print a restart file every 5K steps (can be less frequent)
 !   ntwv=-1,       ! Uncomment to also print velocities to trajectory
 !   ntwf=-1,       ! Uncomment to also print forces to trajectory
     ntxo=2,        ! Write NetCDF format
@@ -58,7 +58,7 @@ A NVT simulation with SINR thermostat production-level simulations
 
  &qmmm
     ! QM atoms
-    qmmask='__QMMASK__',
+    qmmask='(__QMMASK__)',
 
     ! QM settings
     qm_theory='__QMTHEORY__',
@@ -83,4 +83,4 @@ A NVT simulation with SINR thermostat production-level simulations
  &wt type='DUMPFREQ', istep1=10 /
  &wt type='END' /
  DISANG=cv.rst
- DUMPAVE=step5.00_equilibration.cv
+ DUMPAVE=step6.00_equilibration.cv

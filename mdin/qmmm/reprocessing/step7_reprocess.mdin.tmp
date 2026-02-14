@@ -33,11 +33,11 @@ A NVT simulation for common production-level simulations
 
  &qmmm
     ! QM atoms
-    qmmask='(:839,838,862&!@N,H,HA,CA,C,O)|(:1497&!@26594-26600)|(:1498&@26626-26633)|:1368,1630,1632,1633'
+    qmmask='__QMMASK__',
 
     ! QM settings
     qm_theory='EXTERN',
-    qmcharge=0,
+    qmcharge=__QMCHARGE__,
 
     ! Shake
     qmshake=0,     ! Use Shake for QM atoms
@@ -52,7 +52,7 @@ A NVT simulation for common production-level simulations
 
  &qmhub
   config="qmhub2.ini",
-  basedir="/tmp/van/__WIN__/qmhub",
+  basedir="/tmp/__QMBASE__/qmhub2",
   comm=0,
  /
 

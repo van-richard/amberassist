@@ -4,24 +4,18 @@ A NVT simulation with SINR thermostat production-level simulations
     irest=__IREST__,       ! This IS a restart of an old MD simulation
     ntx=__NTX__,         ! So our inpcrd file has velocities
 
-    ! Boundary conditions
-    ntb=1,         ! Periodic boundaries for constant volume
+    ! Boundary conditions ntb=1,         ! Periodic boundaries for constant volume
     ntp=0,         ! No pressure control
 
     ! Temperature control
-    ntt=12,         ! Langevin dynamics
-    gamma_ln=1.0,  ! Friction coefficient (ps^-1)
-    tempi=10.0,    ! Initial temp -- give it some small random velocities
-    temp0=300.0,   ! Target temperature
+    __THERMOSTAT__
     ig=-1,         ! Random number seed
-    nkija=4,
-    sinrtau=0.05,
 
     ! Potential energy control
     cut=10.0,      ! nonbonded cutoff, in Angstroms
 
     ! MD settings
-    nstlim=500,    ! 500 fs total
+    nstlim=__NSTEPS__,    ! 500 fs total
     dt=0.001,      ! time step (ps)
 
     ! SHAKE
@@ -30,9 +24,9 @@ A NVT simulation with SINR thermostat production-level simulations
     tol=0.000001,  ! Shake tolerance
 
     ! Control how often information is printed
-    ntpr=100,      ! Print energies every 100 steps
-    ntwx=100,      ! Print coordinates every 100 steps to the trajectory
-    ntwr=500,     ! Print a restart file every 5K steps (can be less frequent)
+    ntpr=__PRINTFREQ__,      ! Print energies every 100 steps
+    ntwx=__PRINTFREQ__,      ! Print coordinates every 100 steps to the trajectory
+    ntwr=200,     ! Print a restart file every 5K steps (can be less frequent)
 !   ntwv=-1,       ! Uncomment to also print velocities to trajectory
 !   ntwf=-1,       ! Uncomment to also print forces to trajectory
     ntxo=2,        ! Write NetCDF format
@@ -64,23 +58,11 @@ A NVT simulation with SINR thermostat production-level simulations
     qm_theory='__QMTHEORY__',
     qmcharge=__QMCHARGE__,
 
-    ! Shake
-    qmshake=__QMSHAKE__,     ! Use Shake for QM atoms
+__QMCONFIG__
 
-    ! Potential energy control
-    qmcut=__QMCUT__,    ! Cutoff for QM/MM electrostatic interactions
-    qm_ewald=__QMEWALD__,    ! QM/MM with periodic boundaries
-    qm_pme=__QMPME__,      ! Use PME for QM-MM electrostatic interactions
-    qmmm_switch=__QMSWITCH__, ! Switching for QM-MM
-    writepdb=1,    ! Check QM atoms
- /
-
- &qmhub
-  config="qmhub.ini",
-  basedir="__QMHUBSCRATCH__",
- /
+__QMHUB__
 
  &wt type='DUMPFREQ', istep1=10 /
  &wt type='END' /
  DISANG=cv.rst
- DUMPAVE=step5.00_equilibration.cv
+ DUMPAVE=__FNAME__.00_equilibration.cv
