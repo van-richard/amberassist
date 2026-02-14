@@ -2,7 +2,7 @@
 Standalone plotting for the MBAR results produced by mbar0.py.
 
 Reads:
-  - freefile/*/freefile_mbar_{step}.all.rep (by default; or {step}.{rep}.rep if --no-all-reps)
+  - freefile/*/freefile_mbar_{step}.all (by default; or {step}.{rep} if --no-all-reps)
   - ../??/{step}.{rep_glob}_equilibration.cv for hist/kde overlays
   - ../00/cv.rst and ../{n_windows-1}/cv.rst to rebuild val0_k for tick/lines
 
@@ -95,7 +95,7 @@ def main():
                         help="Disable all-reps; use only --rep.")
     parser.add_argument("--n-windows", type=int, default=None, help="Number of windows; autodetect if omitted")
     parser.add_argument("--base-dir", default="..", help="Base directory containing window subdirs (default: ..)")
-    parser.add_argument("--freefile-dir", default="freefile", help="Dir containing freefile outputs (default: freefile)")
+    parser.add_argument("--freefile-dir", default="freefiles", help="Dir containing freefile outputs (default: freefile)")
     parser.add_argument("--img-dir", default="img", help="Directory root for output figures (default: img)")
     args = parser.parse_args()
 
@@ -112,7 +112,7 @@ def main():
     val0_k = np.linspace(val_min, val_max, n_windows)
 
     # Load PMF result (resolve latest timestamped bucket automatically)
-    freefile_name = f"freefile_mbar_{step}.{out_tag}.rep"
+    freefile_name = f"freefile_mbar_{step}.{out_tag}"
     freefile_path = _resolve_freefile_path(args.freefile_dir, freefile_name)
     initial = np.loadtxt(freefile_path)
     xdata = initial[:, 0]
@@ -161,7 +161,7 @@ def main():
     axs['B'].annotate(f"freefile: {freefile_path}",
                       xy=(_xfrac, _yfrac), xycoords='axes fraction',
                       bbox=dict(fc="w", alpha=opa))
-    axs['B'].annotate(rf"$\\Delta G^\\ddag$ = {dgd} $\\pm$ {err}",
+    axs['B'].annotate(f"$\\Delta G^\\ddag$ = {dgd} $\\pm$ {err}",
                       xy=(_xfrac, _yfrac-0.15), xycoords='axes fraction',
                       bbox=dict(fc='w', alpha=opa+0.2))
 
