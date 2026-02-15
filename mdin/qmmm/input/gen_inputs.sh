@@ -5,6 +5,8 @@
 inp_dir="../input"
 total_w=$(cat ../list | wc -l)
 n_windows=$((${total_w}-1))
+init="step3_pbcsetup"
+MDRST="prod00.ncrst"
 
 for i in $(seq 0 ${n_windows}); do
     printf -v window "%02d" $i
@@ -43,7 +45,6 @@ for i in $(seq 0 ${n_windows}); do
         ln -sf step5.00_equilibration.ncrst step5.01_equilibration_inp.ncrst
     fi
      
-    
     for STEP in "step5.00" "step6.00" "step5.01"; do
         sed -i "s/__QMHUBSCRATCH__/${QMHUBSCRATCH}/" ${STEP}_equilibration.mdin
     done
