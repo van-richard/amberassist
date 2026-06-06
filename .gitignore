@@ -9,3 +9,6 @@ build/*/*.sif
 */.ipynb*
 */*/.ipynb*
 */*/*/.ipynb*
+python/
+python/*
+python/*/*
