@@ -17,6 +17,12 @@ Treat the repository as a set of starting points. Review each file before use
 and validate the resulting workflow for the target molecular system, software
 versions, and computing environment.
 
+## Repository Organization
+
+See [`docs/repository-map.md`](docs/repository-map.md) for a status-oriented
+guide to active utilities, reusable templates, project-specific examples,
+legacy material, and files deferred for further review.
+
 ## Who This Is For
 
 This repository may be useful to:
