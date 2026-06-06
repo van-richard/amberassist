@@ -1,21 +1,23 @@
 # Notes
 
-<<<<<<< HEAD
-## Requirements:
+## Requirements
 
-1. MacOS (silicon)
+### macOS (Apple silicon)
 
-```bash "install lima (w/ brew)"
+Install Lima with Homebrew:
+
+```bash
 brew install lima
 ```
 
-```bash "install docker"
-https://docs.docker.com/desktop/setup/install/mac-install/
-```
+Install [Docker Desktop for Mac](https://docs.docker.com/desktop/setup/install/mac-install/).
 
-2. Linux (intel)
+### Linux (x86_64)
 
-```bash "install docker"
+Install Docker Engine using the
+[official instructions](https://docs.docker.com/engine/install/). For Ubuntu:
+
+```bash
 # Add Docker's official GPG key:
 sudo apt-get update
 sudo apt-get install ca-certificates curl
@@ -30,26 +32,10 @@ echo \
       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 sudo apt-get update
-```
-
-```bash "install docker packages"
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-```
 
-```bash "verify installation"
+# Verify installation:
 sudo docker run hello-world
-=======
-!!! note "Requirements (MacOS):"
-    - [`lima`](https://lima-vm.io/docs/reference/limactl/)
-    - `docker`
-
-```bash "lima"
-brew install lima
-```
-
-```bash "docker"
-https://docs.docker.com/engine/install/
->>>>>>> test
 ```
 
 ---
@@ -119,5 +105,4 @@ limactl start apptainer
 ```bash
 limactl stop apptainer
 ```
-
 

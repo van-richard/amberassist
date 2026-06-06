@@ -13,17 +13,10 @@ ENV MAMBA_ROOT_PREFIX=/opt/conda \
     PIP_NO_CACHE_DIR=1 \
     MPLBACKEND=Agg
 
-<<<<<<< HEAD:build/ambertools23/Dockerfile
-# still working on this: jupyter_client=10.6.1 jupyter_core=5.7.2 && \
-# --- conda env with pinned core stack (CONDA syntax: = not ==) ---
-RUN micromamba create -y -n ambertools23 -c conda-forge python=3.11 && \
-    micromamba install -y -n ambertools23 -c conda-forge ambertools=23 
-=======
-# Create AmberTools 24 env (minimal change from v23 → v24)
+# Create AmberTools 24 env.
 RUN micromamba create -y -n ambertools24 -c conda-forge \
       python=3.11 pip ambertools=24 \
  && micromamba clean -a -y
->>>>>>> test:build/ambertools/Dockerfile
 
 # Standard Amber env var (same path convention as before)
 ENV AMBERHOME=/opt/conda/envs/ambertools24

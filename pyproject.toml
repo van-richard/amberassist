@@ -1,0 +1,10 @@
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+extend-exclude = [
+    "build/qmhub/helpme",
+    "build/qmhub/qmhub",
+]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
