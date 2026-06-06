@@ -1,11 +1,55 @@
+# OS and editor files
 .DS_Store
-_drafts
+*~
+*.swp
+*.swo
+
+# Local audit and draft files
+_drafts/
 amberassist_exact_duplicates.csv
 amberassist_reorg_mapping.csv
 apply_reorg.sh
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+
+# Jupyter
+**/.ipynb_checkpoints/
+
+# Build and container artifacts
 build/*/*.tar
 build/*/*.sif
-*/.ipynb_checkpoints
-*/.ipynb*
-*/*/.ipynb*
-*/*/*/.ipynb*
+
+# HPC scheduler output
+slurm-*.out
+slurm-*.err
+*.o[0-9]*
+*.e[0-9]*
+
+# AMBER and QM/MM runtime output
+*.mdout
+mdinfo
+mdcrd
+mden
+restrt
+*.nc
+*.ncrst
+*.rst7
+qmmm.inp_*
+qmhub/
+
+# Generated logs and temporary files
+*.log
+*.tmp
+*.bak
+*.BAK

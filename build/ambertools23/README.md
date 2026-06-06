@@ -1,34 +1,22 @@
 # Build
 
-<<<<<<< HEAD:build/ambertools23/README.md
-Run this locally on MacOS. This creates `mbar_amd64.sif`, copy to HPC with `rsync`.
+Run the script for the local platform. It creates `ambertools24_amd64.sif`,
+which can be copied to the HPC system with `rsync`.
 
 ```bash
 bash build_[machine]_amd64.sh # [machine] is your computer (mac or linux)
-=======
-- Run this locally on MacOS. This creates `mbar_amd64.sif`, copy to HPC with `rsync`.
-
-```bash
-bash build_amd64.sh
->>>>>>> test:build/ambertools/README.md
 ```
 
 # Usage
 
-<<<<<<< HEAD:build/ambertools23/README.md
-```bash "use SIF to run python scripts"
-apptainer exec -B /scratch:/scratch -W "$PWD" ambertools23_amd64.sif python mbar.py --step step6 
-```
-
-- this example uses [mbar.py](../../mbar/mbar.py)
-
-```bash "use SIF to start SHELL"
-apptainer shell -W "$PWD" ambertools23_amd64.sif 
-```
-=======
 ```bash
 apptainer exec -B /scratch:/scratch -W "$PWD" ambertools24_amd64.sif [tool]
 ```
 
-- where `[tool]` can be `tleap`, `cpptraj`, `parmchk2`, etc.
->>>>>>> test:build/ambertools/README.md
+`[tool]` can be `tleap`, `cpptraj`, `parmchk2`, or another AmberTools command.
+
+To start an interactive shell:
+
+```bash
+apptainer shell -B /scratch:/scratch -W "$PWD" ambertools24_amd64.sif
+```
