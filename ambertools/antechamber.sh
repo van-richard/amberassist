@@ -1,7 +1,5 @@
 #!/bin/bash
 
-module load ambertools23
-
 ligand=$1
 charge_method="bcc"
 verbose=2
