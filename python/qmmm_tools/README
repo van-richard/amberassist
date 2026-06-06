@@ -1,0 +1,10 @@
+# Notes
+
+import os
+import sys
+
+SCRIPT_DIR = '/home/van/github/amberassist/python'
+if SCRIPT_DIR not in sys.path:
+    sys.path.append(SCRIPT_DIR)
+
+from qmmm_tools import *

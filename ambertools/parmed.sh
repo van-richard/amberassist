@@ -1,7 +1,5 @@
 #!/bin/bash
 
-module load ambertools23
-
 init="step3_pbcsetup"
 metal="MG"
 
