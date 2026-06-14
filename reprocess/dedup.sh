@@ -8,8 +8,9 @@ if [[ "${1:-}" == "--dry-run" ]]; then
   shift
 fi
 
-# Run from window dir; default target folder is qmhub2/
-dir="${1:-qmhub2}"
+# Mutates generated QMHub input names. Use --dry-run first when checking a run.
+# Run from a window dir; default target folder is qmhub/.
+dir="${1:-qmhub}"
 prefix="qmmm.inp_"
 
 cd "$dir" || { echo "ERROR: cannot cd into '$dir'"; exit 1; }
@@ -30,7 +31,7 @@ width=0
 
 for f in "${files[@]}"; do
   base="${f##*/}"
-  n="${base#${prefix}}"
+  n="${base#"${prefix}"}"
   [[ "$n" =~ ^[0-9]+$ ]] || continue
   (( ${#n} > width )) && width=${#n}
   val=$((10#$n))                # force base-10 (avoid octal)
@@ -39,7 +40,7 @@ done
 
 (( max >= 0 )) || { echo "ERROR: couldn't parse any numeric indices in ${prefix}*"; exit 1; }
 
-# If max is odd, last pair is incomplete; drop it with a warning
+# If max is odd, the last pair is incomplete; drop it with a warning.
 if (( max % 2 == 1 )); then
   echo "WARNING: max index is odd ($max); ignoring last unpaired file"
   max=$((max - 1))
@@ -73,4 +74,3 @@ for ((idx=2; idx<=max; idx+=2)); do
 done
 
 echo "Done. Kept $unique_count frames in $(pwd)"
-

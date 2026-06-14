@@ -1,153 +1,85 @@
-# QM/MM Postprocessing with QMHub
+# QM/MM Reprocessing With QMHub
 
-This directory contains scripts and templates for **postprocessing QM/MM trajectories** from umbrella sampling simulations using the **QMHub–Amber interface**.
+This folder contains the helper files used to re-evaluate saved umbrella-sampling
+production trajectories with Amber `sander.MPI` and QMHub. The scripts are
+workflow glue only; they should not change the scientific model, trajectory data,
+or generated reference products.
 
-The purpose is to **re-evaluate saved trajectory frames** (e.g., from classical MD) with the QM/MM Hamiltonian to obtain consistent potential energy and force data for later analysis — such as **WHAM**, **machine learning potential training**, or **free-energy reconstruction**.
+## Files
 
----
+| File | Purpose |
+| --- | --- |
+| `reprocess.slurm` | SLURM array wrapper for per-window reprocessing. |
+| `write_mdin.sh` | Expands `step7_reprocess.mdin.tmp` into `step7_reprocess.mdin` inside a window directory. |
+| `step7_reprocess.mdin.tmp` | Amber/QMHub single-point reprocessing template. |
+| `qmhub2.ini` | QMHub configuration used by the Amber template. |
+| `dedup.sh` | Optional cleanup for duplicate generated `qmmm.inp_*` files. |
+| `legacy/` | Older notes/scripts kept for reference. |
 
-## Folder Contents
+## Workflow
 
-| File                          | Purpose                                                                |
-| ----------------------------- | ---------------------------------------------------------------------- |
-| `step7_reprocessing.mdin`     | Amber control file for single-point QM/MM energy reprocessing.         |
-| `qmhub2.ini`                  | QMHub configuration file linking Amber MM region to the QM engine.     |
-| `reprocessing.slurm`          | SLURM array script that submits all umbrella windows for reprocessing. |
-| `dedup.sh`                    | Cleans up duplicate `qmmm.inp_*` files generated during QMHub runs.    |
-
----
-
-## Workflow Overview
-
-Each umbrella window is reprocessed independently through a SLURM job array.
-
-1. **SLURM array submission**
-   Each array task corresponds to a single umbrella window (`window_00`, `window_01`, …).
-
-2. **Prepare the QM region**
-   The QM region is defined using an Amber mask read from `qm.mask` or a per-window CSV (`masks.csv`).
-   Atom indices are extracted automatically via `ambmask` or `cpptraj`:
-
-   ```bash
-   ambmask -p system.parm7 -c window_00.ncrst -mask "$(cat qm.mask)" -out atomnum > qm_mask.txt
-   ```
-
-3. **Generate input files**
-   The `step7_reprocessing.mdin` template is expanded using `envsubst` to replace `${WIN_DIR}` with the current working directory.
-
-4. **Run QM/MM reprocessing**
-   Example execution command inside each job:
-
-   ```bash
-   srun -n $SLURM_NTASKS sander.MPI -O \
-     -i step7_reprocessing.mdin \
-     -p system.parm7 \
-     -c window_${WIN}.ncrst \
-     -y window_${WIN}.nc
-   ```
-
-5. **Cleanup**
-   Duplicate QMHub input files (`qmmm.inp_####`) are compacted by running:
-
-   ```bash
-   bash reprocess/dedup.sh
-   ```
-
-   Outputs (`.mdout`, `qmhub/`) are then copied back to the submit directory.
-
----
-
-## 🧠 Computational Notes
-
-* Each reprocessing job performs **single-point QM/MM energy evaluations** (`imin=5`, `maxcyc=1`).
-
-* **OpenMP and BLAS threading are disabled** for best scaling:
-
-  ```bash
-  export OMP_NUM_THREADS=1
-  export MKL_NUM_THREADS=1
-  export OPENBLAS_NUM_THREADS=1
-  ```
-
-* **Parallelization strategy:**
-  Jobs are distributed **across frames** rather than within a single sander run.
-  Each SLURM task handles different frames or windows independently.
-
-* **Performance tips:**
-
-  * Use `--cpu-bind=cores --hint=nomultithread` in SLURM.
-  * Stage input files to `$SLURM_TMPDIR` for faster I/O.
-  * Disable periodic boundary conditions (`ntb=0`) for non-PBC reprocessing unless PME is required.
-  * Reduce unnecessary output: `ntpr=0`, `ntwx=0`, `ntwr=0`.
-
----
-
-## 🧩 QMHub Integration
-
-`qmhub2.ini` defines how QMHub communicates between Amber and the QM engine.
-Typical parameters include:
-
-```ini
-[simulation]
-save_input = True
-
-[model]
-switching_function = lrec
-cutoff = 10.0
-swdist = 10.0
-pbc = False
-
-[engine]
-dummy
-```
-
-During each frame reprocessing step, QMHub:
-
-* Reads the QM atom list from `qm_mask.txt`.
-* Extracts coordinates and MM point charges from Amber.
-* Generates per-frame QM input files (`qmmm.inp_####`) used for external QM calculations or Δ-learning datasets.
-
----
-
-## Quick Start
+`reprocess.slurm` expects a `list` file in the project root, with one umbrella
+window per line, such as `00`, `01`, ..., `41`. Each SLURM array task reads one
+window name, enters that window directory, links `qmhub2.ini`, generates
+`step7_reprocess.mdin`, and runs:
 
 ```bash
-# Submit all 42 umbrella windows
-sbatch reprocess/reprocessing.slurm
-
-# Monitor progress
-squeue -u $USER -n reproc
-
-# Inspect output
-less windows/00/step7_win00.mdout
+sander.MPI -O \
+  -i step7_reprocess.mdin \
+  -o step7_reprocess.mdout \
+  -p step3_pbcsetup.parm7 \
+  -c step5.00_equilibration.ncrst \
+  -y step6*.nc \
+  -x step7_reprocess.nc
 ```
 
----
+The current script uses per-window `step6*.nc` production trajectories. If a
+future workflow should use the concatenated `step6_all.nc` trajectory instead,
+update the script deliberately and document that change before running it.
 
-## Maintenance Tips
+`write_mdin.sh` first reads `../input/qm_info.txt` from the window directory.
+That file should define `qmmask = ...` and `qmcharge = ...`; these values replace
+`__QMMASK__` and `__QMCHARGE__` in the template. If `../input/qm_info.txt` is
+absent, the script extracts those two metadata values from the current window's
+`step6.00_equilibration.mdin`. The fallback reads the production mdin only; it
+does not modify it. The QMHub base path resolves symlinks and points to the real
+current window's `qmhub` directory so it can be archived later as
+`qmhub.squashfs`.
 
-* Clean up intermediate QMHub inputs:
+## Generated Files
 
-  ```bash
-  find . -name "qmmm.inp_*" -delete
-  ```
-* Verify QM region size:
+Reprocessing can create or update files inside each window directory, including:
 
-  ```bash
-  wc -l qmhub/qm_mask.txt
-  ```
-* Update `masks.csv` if the QM region changes across windows.
+* `step7_reprocess.mdin`
+* `step7_reprocess.mdout`
+* `step7_reprocess.nc`
+* `qmhub/`
+* `qmmm.inp_????` files inside the QMHub output directory
 
----
+Treat `step6*.nc`, `step6_all.nc`, `qmhub.squashfs`, and any archived
+`qmhub_inp.????` data products as read-only unless regeneration is explicitly
+requested.
 
-## Summary
+## Optional Deduplication
 
-This setup performs **efficient, automated postprocessing** of QM/MM trajectories with Amber and QMHub using SLURM arrays.
-It is optimized for:
+QMHub may generate duplicate `qmmm.inp_*` files. After a successful reprocessing
+run, inspect the generated directory first:
 
-* Parallel frame re-evaluation
-* Minimal I/O
-* Consistent QM region definition
+```bash
+bash ../reprocess/dedup.sh --dry-run qmhub
+```
 
-and provides reproducible QM/MM datasets for further mechanistic or machine-learning analysis.
+Then run without `--dry-run` only when the planned removals and renumbering are
+expected:
 
+```bash
+bash ../reprocess/dedup.sh qmhub
+```
+
+`dedup.sh` refuses to overwrite existing destination filenames during renumbering.
+
+## Safety Notes
+
+Do not run these scripts from automation unless the target windows and inputs
+have been checked. `reprocess.slurm` launches Amber/QMHub work and is not a
+lightweight validation command.

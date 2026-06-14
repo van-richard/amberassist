@@ -52,7 +52,6 @@ A NVT simulation for common production-level simulations
 
  &qmhub
   config="qmhub2.ini",
-  basedir="/tmp/__QMBASE__/qmhub2",
+  basedir="__QMBASE__",
   comm=0,
  /
-
