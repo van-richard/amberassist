@@ -40,13 +40,15 @@ This repository may be useful to:
 | --- | --- | --- |
 | `ambertools/` | Shell scripts, Python scripts, and notebooks for tools such as `tleap`, `cpptraj`, `pytraj`, `antechamber`, `parmchk2`, and ParmEd. | Mix of reusable helpers and system-specific analysis examples. |
 | `build/` | Docker-based environments and scripts for producing container images, including Apptainer/SIF images for HPC use. | Host- and platform-dependent; read the local build documentation before running. |
+| `eda/` | QM/MM energy decomposition analysis workflows for QM/MM, gas-phase, PCM, and Lennard-Jones force components, mean-force PMFs, and residue-level decompositions. | Active analysis workflow with strong per-window data and file-layout assumptions; consult `eda/README.md` before generating or overwriting caches. |
 | `fmatch/` | Force-matching and semi-empirical reparameterization experiments, including data conversion and model-evaluation helpers. | Research code with dataset- and model-specific assumptions. |
 | `io/` | Input-generation, training-set, trajectory-reorganization, and SLURM helper scripts. | Many files assume particular directory layouts, cluster environments, or molecular systems. |
 | `mbar/` | MBAR/PMF analysis code, notebooks, plotting helpers, and historical implementations. | Contains exploratory notebooks and a `legacy/` area; verify compatibility with the installed PyMBAR version. |
 | `mdin/` | AMBER input templates for classical MD and QM/MM workflows, including umbrella-sampling-related files. | Templates contain scientific defaults that must be reviewed for each system. |
 | `mlp/` | Machine-learning potential and delta-learning experiments, including TorchMD-Net-related files. | Experimental research workflows rather than a general training package. |
 | `notebooks/` | Standalone exploratory and analysis notebooks. | Often project-specific and may require data not included in the repository. |
-| `reprocess/` | Templates and scripts for QM/MM trajectory reprocessing through QMHub. | Designed around specific QMHub, AMBER, and HPC workflows; inspect local paths and configuration. |
+| `reprocess/` | AMBER/QMHub trajectory reprocessing templates, including SLURM submission, mdin generation, QMHub configuration, and optional duplicate-input cleanup. | Designed around specific QMHub, AMBER, and HPC workflows; inspect window lists, paths, and generated outputs before running. |
+| `tp/` | DFT thermodynamic perturbation helpers for QMHub/Q-Chem single-point calculations, frame-level energy and force outputs, combined TP energy arrays, and plotting. | Requires existing unpacked QMHub inputs in window directories; see `tp/README.md` before launching Q-Chem jobs. |
 | `util/` | Smaller utilities for structure and residue-related data preparation. | Review expected input formats and working-directory assumptions. |
 | `wtp/` | Weighted thermodynamic perturbation analysis using QMHub/Q-Chem outputs, plus combination and PMF helpers. | Includes current examples, notebooks, and legacy scripts; consult `wtp/README.md` and verify filenames before use. |
 
@@ -68,10 +70,38 @@ restraints, topology names, coordinate names, and engine configuration.
 
 ### SLURM Job Templates
 
-SLURM examples appear in `io/slurm/`, `mdin/`, `reprocess/`, and `wtp/`.
-Before submission, update account and partition settings, resource requests,
-module or environment setup, scratch paths, executable locations, and input
-file paths for the target cluster.
+SLURM examples appear in `io/slurm/`, `mdin/`, `reprocess/`, `tp/`, `eda/`,
+and `wtp/`. Before submission, update account and partition settings, resource
+requests, module or environment setup, scratch paths, executable locations, and
+input file paths for the target cluster.
+
+### QM/MM Reprocessing
+
+The `reprocess/` workflow re-evaluates saved umbrella-sampling production
+trajectories with Amber `sander.MPI` and QMHub. See
+[`reprocess/README.md`](reprocess/README.md) for the expected window list,
+`write_mdin.sh` metadata handling, `qmhub2.ini` setup, generated
+`step7_reprocess.*` files, and optional `dedup.sh` cleanup. This workflow
+launches Amber/QMHub calculations and should not be used as a lightweight
+validation command.
+
+### DFT Thermodynamic Perturbation
+
+The `tp/` directory contains the DFT TP workflow for existing QMHub frame
+inputs. It expects visible `../WINDOW/qmhub/qmmm.inp_????` files, runs
+QMHub/Q-Chem single-point calculations through `dft_tp.py` and
+`dft_tp.slurm`, combines frame-level energies with `combine_dft_tp.py`, and
+plots TP energy differences with `plot_tp.py`. See [`tp/README.md`](tp/README.md)
+before running jobs or overwriting TP outputs.
+
+### Energy Decomposition Analysis
+
+The `eda/` directory contains QM/MM energy decomposition analysis workflows for
+per-window QM/MM, gas-phase, PCM, and Lennard-Jones force components. Producer
+jobs write per-window arrays under each window's `eda/` directory, while helper
+scripts build coordinate and residue-force caches used by mean-force and
+residue-level analyses. See [`eda/README.md`](eda/README.md) before launching
+SLURM jobs, regenerating `.npy` caches, or modifying reference window data.
 
 ### MBAR and Free-Energy Analysis
 

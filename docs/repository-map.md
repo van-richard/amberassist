@@ -8,6 +8,7 @@ scientifically appropriate for a new system.
 | --- | --- | --- | --- |
 | `ambertools/` | template | AmberTools setup and analysis helpers for `tleap`, `cpptraj`, `pytraj`, ligand preparation, and related tasks. | Contains both reusable shell helpers and project-shaped notebooks/scripts. Inspect filenames, masks, and trajectory assumptions. |
 | `build/` | template | Docker and Apptainer/SIF build workflows for AmberTools, MBAR, Miniforge, QMHub, and related environments. | Build-host and architecture assumptions vary by subdirectory. Generated images are not source material. |
+| `eda/` | template | QM/MM energy decomposition analysis for QM/MM, gas-phase, PCM, and Lennard-Jones force terms, mean-force PMFs, and residue-level decomposition. | Active workflow with strong assumptions about `../00` through `../41`, visible QMHub inputs, per-window `eda/` outputs, and cache regeneration. |
 | `examples/` | example | Explicitly project-specific workflows separated from general helpers. | Examples preserve their original scientific assumptions and are not generic defaults. |
 | `fmatch/` | example | Force-matching, parameter perturbation, data conversion, and model-evaluation experiments. | Assumes particular datasets, atom counts, model formats, and external modules. |
 | `io/` | unclear | Input generation, training-set preparation, trajectory reorganization, and SLURM helpers. | Mixed-purpose area with reusable utilities and cluster/project-specific scripts. Review individual files before reuse. |
@@ -16,7 +17,8 @@ scientifically appropriate for a new system.
 | `mdin/` | template | Classical MD and QM/MM AMBER input templates, restraints, and related run files. | Scientific defaults, masks, restraint values, and paths are system-specific and must be reviewed without assuming portability. |
 | `mlp/` | example | Machine-learning potential and delta-learning experiments. | Research code tied to specific datasets, tensor shapes, dependencies, and training procedures. |
 | `notebooks/` | example | Exploratory analysis notebooks. | May require data not present in the repository and may contain project history or stored outputs. |
-| `reprocess/` | template | QMHub-based QM/MM trajectory reprocessing templates and helpers. | Active templates coexist with archived versions. Cluster setup and file-layout assumptions require review. |
+| `reprocess/` | template | AMBER/QMHub trajectory reprocessing templates, including SLURM array submission, mdin generation, QMHub configuration, and duplicate-input cleanup. | Active templates coexist with archived versions. Review window lists, `qm_info.txt` or mdin metadata, `qmhub/` outputs, and manual deduplication before running. |
+| `tp/` | template | DFT thermodynamic perturbation workflow for QMHub/Q-Chem single-point calculations, frame energy/force outputs, combined TP arrays, and plotting. | Requires existing unpacked `../WINDOW/qmhub/qmmm.inp_????` inputs and external QM software; writes TP outputs under `tp/qmmm_energies/` and `mbar/tp_energy/`. |
 | `util/` | active | Small structure and residue-data utilities. | More general-purpose than most areas, but expected inputs and working-directory behavior still need checking. |
 | `wtp/` | template | Weighted thermodynamic perturbation, result combination, and PMF-related helpers. | Active examples coexist with notebooks and `wtp/legacy/`; verify current filenames and external QM dependencies. |
 
@@ -37,6 +39,7 @@ The following directories are preserved as archives:
 
 - `mbar/legacy/`
 - `mdin/qmmm/legacy/`
+- `eda/legacy/`
 - `reprocess/legacy/`
 - `wtp/legacy/`
 
