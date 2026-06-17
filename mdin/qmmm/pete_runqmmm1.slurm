@@ -8,7 +8,6 @@
 
 date
 
-#source /home/van/pete.qmmm.env
 module load amber/23-panxl
 module load qmhub
 module load qchem/5.2
@@ -17,14 +16,23 @@ export MKL_NUM_THREADS=${SLURM_NTASKS_PER_NODE}
 export OMP_NUM_THREADS=${SLURM_NTASKS_PER_NODE}
 
 SANDER="srun -n ${SLURM_NTASKS_PER_NODE} sander.MPI"
-#source /home/van/oscer.qmmm.env
 
 init="step3_pbcsetup"
 istep="step5.00_equilibration"
-#n_windows=$(cat list | wc -l)
 
-#for i in $(seq 37 41); do
-for i in $(echo 41); do
+if [ -f list ]; then
+    total_windows=$(wc -l < list)
+    if [ "${total_windows}" -eq 0 ]; then
+        echo "missing n_windows" >&2
+        exit 1
+    fi
+    n_windows=$((total_windows - 1))
+else
+    echo "missing n_windows" >&2
+    exit 1
+fi
+
+for i in $(seq 0 "${n_windows}"); do
     printf -v window "%02d" $i
     
     cd $window
@@ -37,4 +45,3 @@ for i in $(echo 41); do
 done
 
 date
-

@@ -12,8 +12,14 @@ date
 
 module load amber/23-gpu
 
-init="step3_pbcsetup_1264"
 pmemd="pmemd.cuda"
+parm="step3_pbcsetup"
+
+if [ -f "${parm}_1264.parm7" ]; then
+    init="${parm}_1264"
+else
+    init="${parm}"
+fi
 
 if [ -z $1 ] || [ -z $2 ]; then
     echo "missing $1 $2"

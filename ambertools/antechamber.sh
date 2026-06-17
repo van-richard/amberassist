@@ -1,43 +1,108 @@
 #!/bin/bash
 
-ligand=$1
+set -euo pipefail
+
 charge_method="bcc"
 verbose=2
 net_charge=0
-resname="lig"
-intermediate_files="yes" # delete
+resname="UNL"
+intermediate_files="yes"
 
-if [ -z "${ligand}" ]; then
-    echo "NOT FOUND: Requires the ligand PDB file!!!"
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") [-r RESNAME] [-n NET_CHARGE] ligand.pdb
+
+Generate a GAFF2 MOL2 file from a ligand PDB file with AmberTools antechamber.
+
+Options:
+  -r RESNAME      Residue name to write to the MOL2 file (default: UNL)
+  -n NET_CHARGE   Net molecular charge (default: 0)
+  -h              Show this help message
+
+Examples:
+  $(basename "$0") ATP.pdb
+  $(basename "$0") -r ATP -n -4 ATP.pdb
+EOF
+}
+
+if [ "${1:-}" = "--help" ]; then
+    usage
+    exit 0
+fi
+
+while getopts ":r:n:h" opt; do
+    case "$opt" in
+        r)
+            resname="$OPTARG"
+            ;;
+        n)
+            net_charge="$OPTARG"
+            ;;
+        h)
+            usage
+            exit 0
+            ;;
+        :)
+            echo "ERROR: Option -$OPTARG requires an argument." >&2
+            usage >&2
+            exit 1
+            ;;
+        \?)
+            echo "ERROR: Unknown option -$OPTARG." >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [ "$#" -ne 1 ]; then
+    echo "ERROR: Requires exactly one ligand PDB file." >&2
+    usage >&2
     exit 1
 fi
 
-if grep -q ".pdb" ${ligand}; then
-    filename=$(awk -F "." '{print $1}')
-    fileformat=$(awk -F "." '{print $1}')
-else
-    echo "Assuming PDB file"
-    filename=${ligand}
-    fileformat="pdb"
-    name=$(echo ${ligand} | sed 's/.pdb//')
+ligand=$1
+
+case "$ligand" in
+    *.pdb)
+        ;;
+    *)
+        echo "ERROR: antechamber.sh only accepts PDB input files (*.pdb): $ligand" >&2
+        exit 1
+        ;;
+esac
+
+if [ ! -e "$ligand" ]; then
+    echo "ERROR: Ligand PDB file not found: $ligand" >&2
+    exit 1
 fi
+
+if [ ! -f "$ligand" ]; then
+    echo "ERROR: Ligand path is not a regular file: $ligand" >&2
+    exit 1
+fi
+
+if ! command -v antechamber >/dev/null 2>&1; then
+    echo "ERROR: antechamber was not found. Load AmberTools before running this script." >&2
+    exit 1
+fi
+
+filename=$(basename "$ligand")
+stem=${filename%.pdb}
+output="${stem}.mol2"
 
 antechamber \
-    -i ${filename}.${fileformat} \
-    -fi ${fileformat} \
-    -o ${filename}.mol2 \
+    -i "$ligand" \
+    -fi pdb \
+    -o "$output" \
     -fo mol2 \
-    -c ${charge_method} \
-    -s ${verbose} \
-    -nc ${net_charge} \
-    -rn ${resfilename} \
-    -pf ${intermediate_files}
+    -c "$charge_method" \
+    -s "$verbose" \
+    -nc "$net_charge" \
+    -rn "$resname" \
+    -at gaff2 \
+    -pf "$intermediate_files"
 
-if [ -f parmchk2.sh ] && [ ! -f "${filename}.frcmod" ]; then
-    parmchk2 -i ${filename}.mol2 -f mol2 -o ${NAME}.frcmod
-elif [ ! -f "parmchk2.sh" ] && [ ! -f "${filename}.frcmod" ]; then
-    echo "NOT FOUND: parmchk2.sh - required for frcmod !!!"
-else
-    echo "Found frcmod file.. Skipping parmchk2."
-fi
-
+echo "Created $output"
+echo "Next: run parmchk2 -i $output -f mol2 -o ${stem}.frcmod"

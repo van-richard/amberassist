@@ -1,0 +1,65 @@
+A NVT Sander+QMHub+QChem+PLUMED simulation
+ &cntrl
+    imin=0,        ! No minimization
+    irest=0,       ! This is NOT a restart of an old MD simulation
+    ntx=1,         ! So our inpcrd file has no velocities
+
+    ! Boundary conditions
+    ntb=1,         ! Periodic boundaries for constant volume
+    ntp=0,         ! No pressure control
+
+    ! Temperature control
+__THERMOSTAT__
+    ig=-1,         ! Random number seed
+
+    ! Potential energy control
+    cut=10.0,      ! nonbonded cutoff, in Angstroms
+
+    ! MD settings
+    nstlim=__NSTEPS__,    ! PLUMED QMMM simulation length
+    dt=0.001,      ! time step (ps)
+
+    ! SHAKE
+    ntc=1,         ! Constrain bonds containing hydrogen
+    ntf=1,         ! Do not calculate forces of bonds containing hydrogen
+    tol=0.000001,  ! Shake tolerance
+
+    ! Control how often information is printed
+    ntpr=__PRINTFREQ__,      ! Print energies
+    ntwx=__PRINTFREQ__,      ! Print coordinates to the trajectory
+    ntwr=500,      ! Print a restart file every 500 steps
+!   ntwv=-1,       ! Uncomment to also print velocities to trajectory
+!   ntwf=-1,       ! Uncomment to also print forces to trajectory
+    ntxo=2,        ! Write NetCDF format
+    ioutfm=1,      ! Write NetCDF format
+
+    ! Wrap coordinates when printing them to the same unit cell
+    iwrap=1,
+
+    ! Set water atom/residue names for SETTLE recognition
+    watnam='WAT',  ! Water residues are named WAT
+    owtnm='O',     ! Water oxygens are named O
+
+    ! PLUMED input
+    plumed=1,
+    plumedfile='plumed.dat',
+
+    ! QM/MM
+    ifqnt=1,       ! Turn on QM/MM
+ /
+
+ &ewald
+    dsum_tol=0.000001,
+ /
+
+ &qmmm
+    ! QM atoms
+    qmmask='__QMMASK__',
+
+    ! QM settings
+    qm_theory='__QMTHEORY__',
+    qmcharge=__QMCHARGE__,
+
+__QMCONFIG__
+
+__QMHUB__

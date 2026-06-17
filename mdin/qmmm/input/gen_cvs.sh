@@ -2,11 +2,10 @@
 set -euo pipefail
 
 QMINFO="qm_info.txt"
+LIST="../list"
 [[ -f "$QMINFO" ]] || { echo "ERROR: missing $QMINFO" >&2; exit 1; }
+[[ -f "$LIST" ]] || { echo "ERROR: missing $LIST; run write_mdin.sh first" >&2; exit 1; }
 
-# -------------------------
-# Read qm_info.txt (SAFE)
-# -------------------------
 cwd=""
 n_windows=""
 cv_min=""
@@ -20,41 +19,33 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 
   key="${line%%=*}"
   val="${line#*=}"
-
-  # trim whitespace around key
   key="${key#"${key%%[![:space:]]*}"}"
   key="${key%"${key##*[![:space:]]}"}"
 
   case "$key" in
-    cwd)       cwd="$val" ;;
+    cwd) cwd="$val" ;;
     n_windows) n_windows="$val" ;;
-    cv_min)    cv_min="$val" ;;
-    print_freq) print_freq="$val" ;;  # not used here, but harmless
-    rc) rc="$val" ;;  
+    cv_min) cv_min="$val" ;;
+    print_freq) print_freq="$val" ;;
+    rc) rc="$val" ;;
   esac
 done < "$QMINFO"
 
-[[ -n "$cwd" ]]       || { echo "ERROR: $QMINFO missing 'cwd='" >&2; exit 1; }
+[[ -n "$cwd" ]] || { echo "ERROR: $QMINFO missing 'cwd='" >&2; exit 1; }
 [[ -n "$n_windows" ]] || { echo "ERROR: $QMINFO missing 'n_windows='" >&2; exit 1; }
-[[ -n "$cv_min" ]]    || { echo "ERROR: $QMINFO missing 'cv_min='" >&2; exit 1; }
-[[ -n "$rc" ]]       || { echo "ERROR: $QMINFO missing 'rc='" >&2; exit 1; }
+[[ -n "$cv_min" ]] || { echo "ERROR: $QMINFO missing 'cv_min='" >&2; exit 1; }
+[[ -n "$rc" ]] || { echo "ERROR: $QMINFO missing 'rc='" >&2; exit 1; }
 
-# -------------------------
-# CV setup
-# -------------------------
+mapfile -t windows < "$LIST"
+[[ "${#windows[@]}" -gt 0 ]] || { echo "ERROR: $LIST is empty" >&2; exit 1; }
+if [[ "${#windows[@]}" -ne "$n_windows" ]]; then
+  echo "ERROR: $LIST has ${#windows[@]} windows, but $QMINFO says n_windows=${n_windows}" >&2
+  exit 1
+fi
+
 CV_i="$cv_min"
 step="0.1"
-
 inp_dir="../input"
-
-
-# If you still have a "list" file and want to use it, keep this:
-# mapfile -t windows < list
-# Otherwise, generate 00..(n_windows-1) with zero padding:
-windows=()
-for ((i=0; i< n_windows; i++)); do
-  windows+=( "$(printf "%02d" "$i")" )
-done
 
 for window in "${windows[@]}"; do
   echo "create: ${window}, ${inp_dir}/cv.rst"
@@ -67,6 +58,5 @@ for window in "${windows[@]}"; do
   sed -i "s/__RST__/${nn}/g" cv.rst
 
   CV_i="$(echo "${CV_i} + ${step}" | bc)"
-  cd -
+  cd - >/dev/null
 done
-

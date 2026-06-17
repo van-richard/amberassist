@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH -p long
-#SBATCH -t 7-00:00:00
+#SBATCH -p batch
+#SBATCH -t 5-00:00:00
 #SBATCH -N 1
 #SBATCH --ntasks-per-node=8
 #SBATCH -o %jrun.out
@@ -22,7 +22,8 @@ else
 fi
 
 ## run step6.${idx}
-idx="5" 
+idx=${IDX:-6}
+nstlim=${NSTLIM:-800}
 printf -v i "%02d" ${idx}
 istep="step6.${i}_equilibration"
 
@@ -33,7 +34,7 @@ else
     pstep="step6.${j}_equilibration"
     
     # create new mdin file
-    sed "s/${pstep}/${istep}/" ${WINDOW}/${pstep}.mdin > ${WINDOW}/${istep}.mdin
+    perl -pe "s/${pstep}/${istep}/g; s/nstlim=[^,]*/nstlim=${nstlim}/" ${WINDOW}/${pstep}.mdin > ${WINDOW}/${istep}.mdin
 fi
 
 init="step3_pbcsetup"
@@ -46,4 +47,3 @@ cd $WINDOW
 $SANDER -O -i ${istep}.mdin -o ${istep}.mdout -p ${init}.parm7 -c ${pstep}.ncrst -r ${istep}.ncrst -x ${istep}.nc -ref ${init}.ncrst -inf ${istep}.mdinfo
 
 date
-

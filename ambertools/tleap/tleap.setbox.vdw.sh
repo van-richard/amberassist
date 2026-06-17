@@ -1,6 +1,6 @@
 #!/bin/bash
-# Prepare topology/coordinate files with 12-6-4 Lennard-Jones ion parameters.
-# For protein, nucleic acid, and ion-containing systems.
+# Prepare topology/coordinate files with a box based on van der Waals radii.
+# Uses 12-6-4 Lennard-Jones ion parameters by default.
 
 set -euo pipefail
 
@@ -10,9 +10,6 @@ Usage: $(basename "$0") system.pdb
 
 Environment overrides:
   OUT_PREFIX   Output prefix (default: step3_pbcsetup)
-  WATER_BOX    Water box model (default: TIP3PBOX)
-  BUFFER       Solvent buffer distance (default: 12.0)
-  CLOSENESS    Solvent closeness parameter (default: 0.8)
   ION_FRCMOD   12-6-4 ion frcmod file (default: frcmod.ions234lm_1264_tip3p)
 EOF
 }
@@ -30,9 +27,6 @@ fi
 
 SYS=$1
 OUT_PREFIX=${OUT_PREFIX:-step3_pbcsetup}
-WATER_BOX=${WATER_BOX:-TIP3PBOX}
-BUFFER=${BUFFER:-12.0}
-CLOSENESS=${CLOSENESS:-0.8}
 ION_FRCMOD=${ION_FRCMOD:-frcmod.ions234lm_1264_tip3p}
 
 if [ ! -f "$SYS" ]; then
@@ -61,9 +55,7 @@ sys = loadpdb ${SYS}
 
 savepdb sys ${OUT_PREFIX}.pdb
 charge sys
-solvatebox sys ${WATER_BOX} ${BUFFER} iso ${CLOSENESS}
-addions sys Na+ 0
-addions sys Cl- 0
+setbox sys vdw
 
 saveamberparm sys ${OUT_PREFIX}.parm7 ${OUT_PREFIX}.rst7
 savepdb sys ${OUT_PREFIX}_wat.pdb

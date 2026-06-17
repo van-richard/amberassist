@@ -1,0 +1,22 @@
+#RESTART 
+
+# set internal units for plumed (Anstrom, kcal/mol, picosecond)
+UNITS LENGTH=A ENERGY=kcal/mol TIME=ps
+
+d1: DISTANCE ATOMS=4,10 # O--H breaking
+d2: DISTANCE ATOMS=1,10 # N--H forming
+
+lw: LOWER_WALLS ARG=d1,d2 AT=0.8,0.8 KAPPA=1000,1000
+uw: UPPER_WALLS ARG=d1,d2 AT=2.6,2.6 KAPPA=1000,1000
+
+rc: CUSTOM ARG=d1,d2 FUNC=x-y PERIODIC=NO
+
+metad: METAD ...
+    ARG=rc
+    PACE=500 
+    HEIGHT=0.6
+    SIGMA=0.1
+    FILE=HILLS
+...
+
+PRINT STRIDE=10 ARG=d1,d2,rc,metad.bias,lw.bias,uw.bias FILE=COLVAR

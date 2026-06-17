@@ -13,7 +13,7 @@ A NPT simulation for common production-level simulations
     cut=12.0,       ! nonbonded cutoff, in angstroms
 
     ! MD settings
-    nstlim=200000,! 2ns total
+    nstlim=200000,! 200 ps total
     dt=0.001,      ! time step (ps)
 
     ! SHAKE
@@ -21,9 +21,9 @@ A NPT simulation for common production-level simulations
     ntf=2,         ! Do not calculate forces of bonds containing hydrogen
 
     ! Control how often information is printed
-    ntpr=50000,     ! Print energies every 1000 steps
-    ntwx=50000,     ! Print coordinates every 5000 steps to the trajectory
-    ntwr=100000,    ! Print a restart file every 10K steps (can be less frequent)
+    ntpr=100000,    ! Print energies every 100 ps
+    ntwx=100000,    ! Print coordinates every 100 ps to the trajectory
+    ntwr=100000,    ! Print a restart file every 100 ps
 !   ntwv=-1,       ! Uncomment to also print velocities to trajectory
 !   ntwf=-1,       ! Uncomment to also print forces to trajectory
     ntxo=2,        ! Write NetCDF format
@@ -50,4 +50,3 @@ A NPT simulation for common production-level simulations
  DISANG=cv.rst
  DUMPAVE=density.cv
  /
-

@@ -1,27 +1,28 @@
 #!/bin/bash
-#SBATCH -p bullet
-#SBATCH -t 6:00:00
-#SBATCH -N 1
-#SBATCH --ntasks-per-node=1
-#SBATCH -o %j.out
-#SBATCH -e %j.err
-#SBATCH --gres=gpu:1
+#PBS -q preemptable
+#PBS -A EnzymeSim
+#PBS -l walltime=48:00:00
+#PBS -l select=1:ncpus=1:ngpus=1
+#PBS -l filesystems=home:eagle
+#PBS -j oe
 
 date
 
-module load amber/23-gpu
+module load amber/24
+cd ${PBS_O_WORKDIR}
 
-cpu="mpirun -n ${SLURM_NTASKS_PER_NODE} pmemd.MPI"
+cpu="mpirun -n ${NCPUS} pmemd.MPI"
 pmemd="pmemd.cuda"
 parm="step3_pbcsetup"
 
+# find the right parm file
 if [ -f "${parm}_1264.parm7" ]; then
     init="${parm}_1264"
 else
     init="${parm}"
 fi
 
-# min
+# min - if CPU fails, then run on cpu with $cpu
 $pmemd -i min.mdin -p ${init}.parm7 -c ${init}.rst7 -O -o min.mdout -r min.rst7 -inf min.mdinfo -ref ${init}.rst7 -x min.nc
 
 # Heating

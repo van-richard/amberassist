@@ -2,6 +2,8 @@
 # Prepare QMMM free energy simulations 
 # Umbrella sampling 
 
+set -euo pipefail
+
 QMINFO="qm_info.txt"
 [[ -f "$QMINFO" ]] || { echo "ERROR: missing $QMINFO" >&2; exit 1; }
 
@@ -10,6 +12,7 @@ QMINFO="qm_info.txt"
 # -------------------------
 qmmask=""
 qmtheory=""
+qmhub_mode=""
 qmcharge=""
 thermostat=""
 NSTEPS5=""
@@ -32,6 +35,7 @@ while IFS= read -r line || [[ -n "$line" ]]; do
   case "$key" in
     qmmask)      qmmask="$val" ;;
     qmtheory)    qmtheory="$val" ;;
+    qmhub_mode)  qmhub_mode="$val" ;;
     qmcharge)    qmcharge="$val" ;;
     thermostat)  thermostat="$val" ;;
     nsteps5)     NSTEPS5="$val" ;;
@@ -46,15 +50,26 @@ for v in qmmask qmtheory qmcharge thermostat NSTEPS5 NSTEPS6 n_windows print_fre
   [[ -n "${!v}" ]] || { echo "ERROR: $QMINFO missing '$v='" >&2; exit 1; }
 done
 
+if [[ "${qmtheory}" == "EXTERN" ]]; then
+  qmhub_mode="${qmhub_mode:-DFT}"
+  case "${qmhub_mode}" in
+    DFT|MTS) ;;
+    *)
+      echo "ERROR: qmhub_mode must be 'DFT' or 'MTS' when qmtheory=EXTERN (got '${qmhub_mode}')" >&2
+      exit 1
+      ;;
+  esac
+fi
+
 # --- Thermostat block (drop this somewhere after THERMOSTAT is set) ---
 case "${thermostat}" in
   langevin)
-    THERMO_BLOCK=$'    ntt=3,         ! SINR thermostat
+    THERMO_BLOCK=$'    ntt=3,         ! Langevin dynamics
     gamma_ln=1.0,  ! Friction coefficient (ps^-1)
     temp0=300.0,   ! Target temperature'
     ;;
   sinr)
-    THERMO_BLOCK=$'    ntt=12,         ! Langevin dynamics
+    THERMO_BLOCK=$'    ntt=12,         ! SINR thermostat
     gamma_ln=1.0,  ! Friction coefficient (ps^-1)
     tempi=10.0,    ! Initial temp -- give it some small random velocities
     temp0=300.0,   ! Target temperature
@@ -152,5 +167,5 @@ render_mdin() {
 render_mdin "equilibration.mdin.tmp" "step5"
 render_mdin "equilibration.mdin.tmp" "step6"
 
-n_win=$(echo "${n_windows}-1" | bc)
-seq -w 0 ${n_win} > ../list
+n_win=$((n_windows - 1))
+seq -w 0 "${n_win}" > ../list

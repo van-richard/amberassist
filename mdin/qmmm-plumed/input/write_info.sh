@@ -1,6 +1,6 @@
 #!/bin/bash
-# Prepare QMMM free energy simulations.
-# Edit this file for the system, then run write_mdin.sh, gen_inputs.sh, and gen_cvs.sh.
+# Prepare a single QMMM+PLUMED simulation directory.
+# Edit this file for the system, then run write_mdin.sh and gen_plumeddat.sh.
 
 set -euo pipefail
 
@@ -8,14 +8,15 @@ REF="../dft"
 init="step3_pbcsetup"
 MDRST="prod00.ncrst"
 
-N_WINDOWS=42
-CV_MIN=-1.90
-RC="409,410,410,6255"
-
 THERMOSTAT="langevin" # langevin, sinr
-NSTEPS5=500
-NSTEPS6=800
-PRINTFREQ=50
+NSTEPS5=1000
+PRINTFREQ=1
+
+####################
+# PLUMED Configuration
+####################
+PLUMED_METHOD="metad" # metad, wtmetad
+PLUMED_CV="2d"        # 2d, d1-d2
 
 ##################
 # QM Configuration
@@ -37,16 +38,26 @@ QMCHARGE="+1"
 ####################
 # Don't change this
 ####################
-cwd=$(realpath ..)
-inp_dir="${cwd}/input"
+run_dir=$(realpath ..)
+inp_dir="${run_dir}/input"
 
-for v in N_WINDOWS CV_MIN RC THERMOSTAT NSTEPS5 NSTEPS6 PRINTFREQ QMMASK QMTHEORY QMCHARGE; do
+for v in THERMOSTAT NSTEPS5 PRINTFREQ PLUMED_METHOD PLUMED_CV QMMASK QMTHEORY QMCHARGE; do
     [ -n "${!v}" ] || { echo "ERROR: missing ${v}" >&2; exit 1; }
 done
 
 case "$THERMOSTAT" in
     langevin|sinr) ;;
     *) echo "ERROR: THERMOSTAT must be 'langevin' or 'sinr' (got '$THERMOSTAT')" >&2; exit 1 ;;
+esac
+
+case "$PLUMED_METHOD" in
+    metad|wtmetad) ;;
+    *) echo "ERROR: PLUMED_METHOD must be 'metad' or 'wtmetad' (got '$PLUMED_METHOD')" >&2; exit 1 ;;
+esac
+
+case "$PLUMED_CV" in
+    2d|d1-d2) ;;
+    *) echo "ERROR: PLUMED_CV must be '2d' or 'd1-d2' (got '$PLUMED_CV')" >&2; exit 1 ;;
 esac
 
 if [ "$QMTHEORY" = "EXTERN" ]; then
@@ -57,7 +68,8 @@ if [ "$QMTHEORY" = "EXTERN" ]; then
 fi
 
 cat <<_EOF > qm_info.txt
-cwd=${cwd}
+run_dir=${run_dir}
+input_dir=${inp_dir}
 protein=${PROTEIN_RESIDUES}
 na=${NA_MASK}
 metal=${METAL_RESIDUES}
@@ -68,22 +80,22 @@ qmhub_mode=${QMHUB_MODE}
 qmcharge=${QMCHARGE}
 thermostat=${THERMOSTAT}
 nsteps5=${NSTEPS5}
-nsteps6=${NSTEPS6}
-n_windows=${N_WINDOWS}
-cv_min=${CV_MIN}
 print_freq=${PRINTFREQ}
-rc=${RC}
+plumed_method=${PLUMED_METHOD}
+plumed_cv=${PLUMED_CV}
 _EOF
 
 #####################
 # Get files from $REF
 #####################
 echo "copying: files from ${REF}"
-cp "${REF}/${init}.parm7" .
-cp "${REF}/${MDRST}" .
+cp "${REF}/${init}.parm7" "${run_dir}/"
+cp "${REF}/${MDRST}" "${run_dir}/step5.00_equilibration_inp.ncrst"
 
 echo "qmmask=${QMMASK}"
 echo "qmcharge=${QMCHARGE}"
+echo "plumed_method=${PLUMED_METHOD}"
+echo "plumed_cv=${PLUMED_CV}"
 if [ "$QMTHEORY" = "EXTERN" ]; then
     echo "qmhub_mode=${QMHUB_MODE}"
 fi
