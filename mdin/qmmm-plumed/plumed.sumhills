@@ -1,0 +1,19 @@
+#!/bin/bash
+
+export PLUMED_ROOT=/home/van/Programs/plumed-2.9.4
+export PATH=$PLUMED_ROOT/bin:$PATH
+export LD_LIBRARY_PATH=$PLUMED_ROOT/lib:$LD_LIBRARY_PATH
+export PLUMED_KERNEL=$PLUMED_ROOT/lib/libplumedKernel.so
+
+cv_min=-1.9
+cv_max=1.9
+n_bins=299 # nbins -1
+stride=100 # N gaussian hills sliding window (i.e. 500 hills = 5 outputs)
+outname="freefiles/freefile"
+
+mkdir -p freefiles
+
+plumed sum_hills --hills ../HILLS --min ${cv_min} --max ${cv_max} --bin ${n_bins} --mintozero --outfile ${outname}.dat
+
+# check convergences
+plumed sum_hills --hills ../HILLS --min ${cv_min} --max ${cv_max} --bin ${n_bins} --stride ${stride} --mintozero --outfile ${outname}_timedep
